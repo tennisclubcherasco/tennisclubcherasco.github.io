@@ -5,7 +5,8 @@ import {Col, Container } from 'react-bootstrap';
 import { storage } from './firebaseConfig';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './login/login'
-import Main from './main'
+import Register from './login/register'
+import { Main } from './main/main'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/*" element={<Login/>}/>
                     <Route path="/main" element={<Main/>}/>
+                    <Route path="/register" element={<Register/>}/>
                 </Routes>
             </Container>
         </BrowserRouter>

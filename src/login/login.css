@@ -11,12 +11,19 @@
 
 .login-box {
     border-radius: 50px;
-    border-width: 10px;
+    border-width: 8px;
     border-style: solid;
     border-color: #2f7157;
-    max-width: 450px;
     min-width: 200px;
+    max-width: 450px;
     min-height: 340px;
-    max-height: 550px;
+    max-height: 650px;
     background-color: white;
+}
+
+.logo-tennis {
+    min-width: 100px;
+    max-width: 150px;
+    min-height: 100px;
+    max-height: 150px;
 }

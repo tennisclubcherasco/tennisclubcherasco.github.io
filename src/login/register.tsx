@@ -21,18 +21,24 @@ const Register = () => {
 
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
+    const [birthDate, setBirthDate] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [password, setPassword] = useState('')
     const [passwordRepeat, setPasswordRepeat] = useState('')
+    const [forehand, setForehand] = useState('')
+    const [bestShot, setBestShot] = useState('')
 
     const [error, setError] = useState('')
     const [formErrors, setFormErrors] = useState({
         name: "",
         surname: "",
+        birthDate: "",
         email: "",
         phone: "",
-        password: ""
+        password: "",
+        forehand: "",
+        bestShot: ""
     });
 
     useEffect(() => {
@@ -74,9 +80,12 @@ const Register = () => {
         let formErrors = {
             name: "",
             surname: "",
+            birthDate: "",
             email: "",
             phone: "",
-            password: ""
+            password: "",
+            forehand: "",
+            bestShot: ""
         };
         let formValid = true;
 
@@ -88,6 +97,15 @@ const Register = () => {
         if (!surname) {
             formErrors.surname = "Il cognome è obbligatorio.";
             formValid = false;
+        }
+
+        if (!birthDate) {
+            formErrors.birthDate = "La data di nascita è obbligatoria.";
+            formValid = false;
+        }
+
+        if (new Date(birthDate) > new Date()) {
+            formErrors.birthDate = "La data di nascita non è valida."
         }
 
         if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -120,6 +138,16 @@ const Register = () => {
             formValid = false;
         }
 
+        if (!forehand) {
+            formErrors.forehand = "Seleziona il lato del diritto.";
+            formValid = false;
+        }
+
+        if (!bestShot) {
+            formErrors.bestShot = "Seleziona il colpo preferito.";
+            formValid = false;
+        }
+
         setFormErrors(formErrors);
         return formValid;
     }
@@ -146,8 +174,11 @@ const Register = () => {
                 status: "PENDING",
                 name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(),
                 surname: surname.charAt(0).toUpperCase() + surname.slice(1).toLowerCase(),
+                birthDate: birthDate,
                 email: email,
-                phone: phone
+                phone: phone,
+                forehand: forehand,
+                bestShot: bestShot,
             });
 
             console.log("User registered successfully");
@@ -196,7 +227,7 @@ const Register = () => {
                             Match history
                         </h2>
                         <h4 className="my-font" style={{color: 'white', fontWeight: 'lighter'}}>
-                            Consulta le statistiche e lo storico delle tue partite di quelle degli altri giocatori.
+                            Consulta le statistiche e lo storico delle tue partite e di quelle degli altri giocatori.
                         </h4>
                     </Col>
                 </Row>
@@ -244,7 +275,7 @@ const Register = () => {
                                 <></>
                             }
                             <Row className="justify-content-between mx-5">
-                                <Col className="mt-3" sm={6}>
+                                <Col className="mt-3" sm={4}>
                                     <Form.Group>
                                         <Form.Label>Nome</Form.Label>
                                         <Form.Control
@@ -258,7 +289,7 @@ const Register = () => {
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
-                                <Col className="mt-3" sm={6}>
+                                <Col className="mt-3" sm={4}>
                                     <Form.Group>
                                         <Form.Label>Cognome</Form.Label>
                                         <Form.Control
@@ -272,34 +303,50 @@ const Register = () => {
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
+                                <Col className="mt-3" sm={4}>
+                                    <Form.Group>
+                                        <Form.Label>Data di nascita</Form.Label>
+                                        <Form.Control
+                                            type="date"
+                                            value={birthDate}
+                                            onChange={(e) => setBirthDate(e.target.value)}
+                                            isInvalid={!!formErrors.birthDate}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.birthDate}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
                             </Row>
-                            <Row className="justify-content-between mx-5 mt-3">
-                                <Form.Group>
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        isInvalid={!!formErrors.email}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {formErrors.email}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Row>
-                            <Row className="justify-content-between mx-5 mt-3">
-                                <Form.Group>
-                                    <Form.Label>Numero di telefono</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        isInvalid={!!formErrors.phone}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {formErrors.phone}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                            <Row className="justify-content-between mx-5">
+                                <Col className="mt-3" sm={6}>
+                                    <Form.Group>
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            isInvalid={!!formErrors.email}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.email}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                                <Col className="mt-3" sm={6}>
+                                    <Form.Group>
+                                        <Form.Label>Numero di telefono</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            isInvalid={!!formErrors.phone}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.phone}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
                             </Row>
                             <Row className="justify-content-between mx-5 mt-3">
                                 <Form.Group>
@@ -327,6 +374,47 @@ const Register = () => {
                                         onChange={(e) => setPasswordRepeat(e.target.value)}
                                     />
                                 </Form.Group>
+                            </Row>
+                            <Row className="justify-content-between mx-5">
+                                <Col className="mt-3" sm={6}>
+                                    <Form.Group>
+                                        <Form.Label>Lato diritto</Form.Label>
+                                        <Form.Select
+                                            value={forehand}
+                                            onChange={(e) => setForehand(e.target.value)}
+                                            isInvalid={!!formErrors.forehand}
+                                        >
+                                            <option>Seleziona...</option>
+                                            <option value="Destra">Destra</option>
+                                            <option value="Sinistra">Sinistra</option>
+                                        </Form.Select>
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.forehand}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                                <Col className="mt-3" sm={6}>
+                                    <Form.Group>
+                                        <Form.Label>Colpo preferito</Form.Label>
+                                        <Form.Select
+                                            value={bestShot}
+                                            onChange={(e) => setBestShot(e.target.value)}
+                                            isInvalid={!!formErrors.bestShot}
+                                        >
+                                            <option>Seleziona...</option>
+                                            <option value="Diritto">Diritto</option>
+                                            <option value="Rovescio">Rovescio</option>
+                                            <option value="Servizio">Servizio</option>
+                                            <option value="Volée">Volée</option>
+                                            <option value="Smash">Smash</option>
+                                            <option value="Palla corta">Palla corta</option>
+                                            <option value="Slice">Slice</option>
+                                        </Form.Select>
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.bestShot}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
                             </Row>
                             <Row className="mx-5 mt-3 mb-4">
                                 <Container fluid className="d-flex justify-content-center">

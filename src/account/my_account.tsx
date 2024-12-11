@@ -1,15 +1,18 @@
-import {Col, Container, Row } from "react-bootstrap";
+import {Button, Col, Container, Row } from "react-bootstrap";
 import MyNavbar from "../navbar/navbar";
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {getUser} from "../utils/get_data";
+import { useAuth } from "../AuthContext";
 
 function PlayerAccount() {
+    const navigate = useNavigate();
     const { userId } = useParams<{userId: string}>();
+    const {currentUser, loading} = useAuth();
     const [isScreenSmall, setIsScreenSmall] = useState(window.matchMedia('(max-width: 1000px)').matches);
-    const [noMargin, setNoMargin] = useState(window.matchMedia('(max-width: 1500px)').matches);
     const [user, setUser] = useState<any>(null);
+    const [accountHover, setAccountHover] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -23,25 +26,47 @@ function PlayerAccount() {
 
     useEffect(() => {
         const mediaQueryList1 = window.matchMedia('(max-width: 1200px)');
-        const mediaQueryList2 = window.matchMedia('(min-width: 1200px) and (max-width: 1500px)');
 
         const handleResize1 = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {
             setIsScreenSmall(event.matches);
         };
-        const handleResize2 = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {
-            setNoMargin(event.matches);
-        };
 
         mediaQueryList1.addEventListener('change', handleResize1);
-        mediaQueryList2.addEventListener('change', handleResize2);
 
         return () => {
             mediaQueryList1.removeEventListener('change', handleResize1);
-            mediaQueryList2.removeEventListener('change', handleResize2);
         };
     }, []);
 
-    const infoMargin = noMargin ? "d-flex justify-content-between mt-3" : "d-flex justify-content-between mt-3 mx-5"
+    const EditButton = () => {
+        if (currentUser.uid == userId) {
+            return(
+                <Row>
+                    <Col className="p-0 mt-3">
+                        <Button className="mt-4" variant="primary" type="submit"
+                                style={{
+                                    background: accountHover ? "#109661FF" : '#2f7157',
+                                    width: '50%',
+                                    borderColor: 'white',
+                                    borderRadius: '18px'
+                                }}
+                                onMouseEnter={() => setAccountHover(true)}
+                                onMouseOut={() => setAccountHover(false)}
+                                onTouchStart={() => setAccountHover(true)}
+                                onTouchEnd={() => setAccountHover(false)}
+                                onClick={() => navigate(`/account/${currentUser.uid}/edit`)}>
+                            Modifica profilo
+                        </Button>
+                    </Col>
+                </Row>
+            )
+        }
+        else {
+            return (
+                <></>
+            )
+        }
+    }
 
     if (user != null) {
         return (
@@ -49,30 +74,45 @@ function PlayerAccount() {
                 <MyNavbar/>
                 <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
                     <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
-                        <Col className="py-0 my-5 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
+                        <Col className="py-0 my-2 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
                             <Container fluid className="justify-content-center mt-4">
                                 <FaUserCircle style={{ width:'170px', height:'auto', color: 'black', maxWidth: '30%', objectFit: 'scale-down' }} />
                             </Container>
                             <h1 className="my-font mt-3">{user.name} {user.surname}</h1>
                             <Container className="d-flex flex-column mt-4">
-                                <Col className={infoMargin}>
-                                    <h5>Ranking attuale:</h5><h4></h4>
-                                </Col>
-                                <Col className={infoMargin}>
-                                    <h5>Best ranking:</h5><h4></h4>
-                                </Col>
-                                <Col className={infoMargin}>
-                                    <h5>Lato diritto:</h5><h5></h5>
-                                </Col>
-                                <Col className={infoMargin}>
-                                    <h5>Colpo preferito:</h5><h5></h5>
-                                </Col>
-                                <Col className={infoMargin}>
-                                    <h5>Email:</h5><h5>{user.email}</h5>
-                                </Col>
-                                <Col className={infoMargin}>
-                                    <h5>Telefono:</h5><h5>{user.phone}</h5>
-                                </Col>
+                                <Row className="mt-3">
+                                    <Col className="" xs={6}>
+                                        <h4 className="my-font">Ranking attuale:</h4>
+                                        <h2 className="my-font" style={{color:"#2f7157"}}>12</h2>
+                                    </Col>
+                                    <Col className="" xs={6}>
+                                        <h4 className="my-font">Best Ranking:</h4>
+                                        <h2 className="my-font" style={{color:"#2f7157"}}>5</h2>
+                                    </Col>
+                                </Row>
+                                <Row className="mt-5">
+                                    <Col className="" xs={6}>
+                                        <h4 className="my-font">Lato diritto:</h4>
+                                        <h3 className="my-font" style={{color:"#2f7157"}}>{user.forehand}</h3>
+                                    </Col>
+                                    <Col className="" xs={6}>
+                                        <h4 className="my-font">Colpo preferito:</h4>
+                                        <h3 className="my-font" style={{color:"#2f7157"}}>{user.bestShot}</h3>
+                                    </Col>
+                                </Row>
+                                <Row className="mt-5">
+                                    <Col className="">
+                                        <h4 className="my-font">Email:</h4>
+                                        <h3 className="my-font" style={{color:"#2f7157"}}>{user.email}</h3>
+                                    </Col>
+                                </Row>
+                                <Row className="mt-5">
+                                    <Col className="">
+                                        <h4 className="my-font">Telefono:</h4>
+                                        <h3 className="my-font" style={{color:"#2f7157"}}>{user.phone}</h3>
+                                    </Col>
+                                </Row>
+                                <EditButton/>
                             </Container>
                         </Col>
                         {!isScreenSmall && <Col className="p-0 d-flex flex-column" sm={8}>

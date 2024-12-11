@@ -7,8 +7,9 @@ import Login from './login/login'
 import Register from './login/register'
 import PlayerAccount from './account/my_account'
 import { Main } from './main/main'
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
+import EditAccount from './account/edit_account';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                         <Route path="/main" element={<Main/>}/>
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/account/:userId" element={<PlayerAccount/>}/>
+                        <Route path="/account/:userId/edit" element={<EditAccount/>}/>
                     </Routes>
                 </Container>
             </HashRouter>

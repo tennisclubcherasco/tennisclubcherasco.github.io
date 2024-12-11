@@ -50,6 +50,7 @@ function MyNavbar() {
                 className="img-fluid"
                 style={{ width:'75px', height: 'auto' }}
                 alt="Logo"
+                onClick={() => navigate("/main")}
             />
             <div className="me-3 d-flex align-items-center">
                 <FaUserCircle style={{ width:'30px', height:'auto', color: 'white' }} onClick={() => navigate(`/account/${currentUser.uid}`)}/>
@@ -57,7 +58,7 @@ function MyNavbar() {
         </Navbar>
             :
         <Navbar style={{ height: "90px", width: "100%", backgroundColor: "#2f7157" }} className="d-flex justify-content-between">
-            <NavbarBrand className="align-items-center d-flex p-0">
+            <NavbarBrand className="align-items-center d-flex p-0 ms-5">
                 <img
                     src={logoInvUrl}
                     className="img-fluid ms-1"

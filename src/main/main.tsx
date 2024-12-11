@@ -16,7 +16,7 @@ function Main() {
     const [noLastMatches, setNoLastMatches] = useState(window.matchMedia('(max-width: 1000px)').matches);
 
     useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 850px)');
+        const mediaQueryList = window.matchMedia('(max-width: 780px)');
         const mediaQueryList2 = window.matchMedia('(max-width: 1100px)');
 
         const handleResize = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {

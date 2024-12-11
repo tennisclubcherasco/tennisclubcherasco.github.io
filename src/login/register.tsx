@@ -144,10 +144,10 @@ const Register = () => {
             await setDoc(doc(db, "users", user.uid), {
                 uid: user.uid,
                 status: "PENDING",
-                name,
-                surname,
-                email,
-                phone
+                name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(),
+                surname: surname.charAt(0).toUpperCase() + surname.slice(1).toLowerCase(),
+                email: email,
+                phone: phone
             });
 
             console.log("User registered successfully");

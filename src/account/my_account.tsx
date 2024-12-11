@@ -49,31 +49,30 @@ function PlayerAccount() {
                 <MyNavbar/>
                 <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
                     <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
-                        <Col className="py-0 my-5 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
-                            <h2 className="my-font mb-3">Informazioni Sul Giocatore</h2>
+                        <Col className="p-0 my-5 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
                             <Container fluid className="justify-content-center mt-4">
                                 <FaUserCircle style={{ width:'170px', height:'auto', color: 'black', maxWidth: '30%', objectFit: 'scale-down' }} />
                             </Container>
                             <h1 className="my-font mt-3">{user.name} {user.surname}</h1>
-                            <Container className="d-flex flex-column mt-4">
+                            <Container className="d-flex flex-column mt-4 p-0">
                                 <Col className={infoMargin}>
                                     <h5>Ranking attuale:</h5><h4></h4>
                                 </Col>
-                    {/*            <Col className={infoMargin}>*/}
-                    {/*                <h5>Best ranking:</h5><h4></h4>*/}
-                    {/*            </Col>*/}
-                    {/*            <Col className={infoMargin}>*/}
-                    {/*                <h5>Lato diritto:</h5><h5></h5>*/}
-                    {/*            </Col>*/}
-                    {/*            <Col className={infoMargin}>*/}
-                    {/*                <h5>Colpo preferito:</h5><h5></h5>*/}
-                    {/*            </Col>*/}
-                    {/*            <Col className={infoMargin}>*/}
-                    {/*                <h5>Email:</h5><h5>{user.email}</h5>*/}
-                    {/*            </Col>*/}
-                    {/*            <Col className={infoMargin}>*/}
-                    {/*                <h5>Telefono:</h5><h5>{user.phone}</h5>*/}
-                    {/*            </Col>*/}
+                                <Col className={infoMargin}>
+                                    <h5>Best ranking:</h5><h4></h4>
+                                </Col>
+                                <Col className={infoMargin}>
+                                    <h5>Lato diritto:</h5><h5></h5>
+                                </Col>
+                                <Col className={infoMargin}>
+                                    <h5>Colpo preferito:</h5><h5></h5>
+                                </Col>
+                                <Col className={infoMargin}>
+                                    <h5>Email:</h5><h5>{user.email}</h5>
+                                </Col>
+                                <Col className={infoMargin}>
+                                    <h5>Telefono:</h5><h5>{user.phone}</h5>
+                                </Col>
                             </Container>
                         </Col>
                         {!isScreenSmall && <Col className="p-0 d-flex flex-column" sm={8}>

@@ -13,7 +13,7 @@ import { AuthProvider } from './AuthContext';
 function App() {
     return (
         <AuthProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Container fluid className="App p-0">
                     <Routes>
                         <Route path="/*" element={<Login/>}/>

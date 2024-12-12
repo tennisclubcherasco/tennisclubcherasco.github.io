@@ -1,5 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { db, storage } from "../firebaseConfig";
+import {getDownloadURL, ref } from "firebase/storage";
 
 async function getUser(userId: string) {
     try {
@@ -18,4 +19,16 @@ async function getUser(userId: string) {
     }
 }
 
-export { getUser };
+const downloadImageFromStorage = async (imageUrl: string): Promise<string | null> => {
+    try {
+        const storageRef = ref(storage, imageUrl); // Usa l'URL salvato in Firestore come riferimento nel Firebase Storage
+        const downloadURL = await getDownloadURL(storageRef); // Ottieni l'URL di download
+
+        return downloadURL;
+    } catch (error) {
+        console.error("Error downloading image from Firebase Storage: ", error);
+        return null;
+    }
+};
+
+export { getUser, downloadImageFromStorage };

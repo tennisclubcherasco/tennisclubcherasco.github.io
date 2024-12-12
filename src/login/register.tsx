@@ -1,23 +1,39 @@
 import { getDownloadURL, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {Alert, Button, Col, Container, Form, Row } from "react-bootstrap"
 import { storage, auth, db } from "../firebaseConfig";
-import { FaTrophy, FaUsers, FaComments } from 'react-icons/fa'
+import { FaTrophy, FaUsers, FaComments, FaUserCircle } from 'react-icons/fa'
 import '../App.css'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
+import AccountIcon from "../utils/account_icon";
+import ScreenResize from "../utils/screen_resize";
+import ReactCrop, { Crop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { uploadImage } from "../utils/image_handler";
 
 const Register = () => {
     const navigate = useNavigate();
-
-    const [isScreenSmall, setIsScreenSmall] = useState(window.matchMedia('(max-width: 1000px)').matches);
+    const isScreenSmall = ScreenResize(900)
     const [logoInvUrl, setLogoInvUrl] = useState('')
     const [logoUrl, setLogoUrl] = useState('')
     const [validated, setValidated] = useState(false);
     const [submitHover, setSubmitHover] = useState(false);
     const [backHover, setBackHover] = useState(false);
+    const [imgButtonHover, setImgButtonHover] = useState(false);
+
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [image, setImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [crop, setCrop] = useState<Crop>({
+        unit: "px", // unità di misura
+        width: 100, // larghezza iniziale del crop
+        height: 100, // altezza iniziale del crop
+        x: 0, // posizione orizzontale del crop
+        y: 0, // posizione verticale del crop
+    });
 
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
@@ -42,20 +58,6 @@ const Register = () => {
     });
 
     useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 900px)');
-
-        const handleResize = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {
-            setIsScreenSmall(event.matches);
-        };
-
-        mediaQueryList.addEventListener('change', handleResize);
-
-        return () => {
-            mediaQueryList.removeEventListener('change', handleResize);
-        };
-    }, []);
-
-    useEffect(() => {
         const logoInvRef = ref(storage, 'gs://tennisclubcherasco.appspot.com/utils/logoTennisInverted.png');
         const logoRef = ref(storage, 'gs://tennisclubcherasco.appspot.com/utils/logoTennis.png')
 
@@ -75,6 +77,23 @@ const Register = () => {
                 console.error('Errore durante il recupero dell\'immagine:', error);
             });
     }, []);
+
+    const handleSelectImage = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const selectedFile = event.target.files[0];
+            setImage(selectedFile);
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    };
 
     const checkValidity = () : Boolean => {
         let formErrors = {
@@ -168,6 +187,7 @@ const Register = () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
+            const profileImage = await uploadImage(image, user.uid);
 
             await setDoc(doc(db, "users", user.uid), {
                 uid: user.uid,
@@ -179,6 +199,7 @@ const Register = () => {
                 phone: phone,
                 forehand: forehand,
                 bestShot: bestShot,
+                profileImage: profileImage,
             });
 
             console.log("User registered successfully");
@@ -248,6 +269,41 @@ const Register = () => {
         )
     }
 
+    const HandleImage = () => {
+        if (image == null) return (
+            <AccountIcon size={120}/>
+        )
+        else if (imagePreview) return (
+            <div
+                style={{
+                    width: "150px", // Imposta la larghezza del cerchio
+                    height: "150px", // Imposta l'altezza del cerchio
+                    borderRadius: "50%", // Per farlo circolare
+                    overflow: "hidden", // Nascondi le parti fuori dal cerchio
+                }}
+            >
+                {/*<ReactCrop*/}
+                {/*    crop={crop}*/}
+                {/*    onChange={(newCrop) => null}*/}
+                {/*    ruleOfThirds*/}
+                {/*>*/}
+                    <img
+                        src={imagePreview}
+                        alt="Anteprima immagine"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                        }}
+                    />
+                {/*</ReactCrop>*/}
+            </div>
+        )
+        else return (
+            <AccountIcon size={120}/>
+        )
+    }
+
     return(
         <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
             <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
@@ -255,7 +311,7 @@ const Register = () => {
                 <Col className="p-0 d-flex flex-column" sm={isScreenSmall ? 12 : 6}>
                     <Container fluid className="d-flex p-0 m-0 flex-grow-1 align-items-center">
                         <Form noValidate className="" style={{ width: '100%' }} validated={validated} onSubmit={handleRegister}>
-                            <Col className="d-flex align-items-center mx-5 mb-4">
+                            <Col className="d-flex justify-content-center align-items-center mx-5 mb-4">
                                 {isScreenSmall ?
                                     <img src={logoUrl} className="img-fluid mt-3" style={{maxWidth: '150px', height: 'auto', objectFit: 'scale-down'}} />
                                         :
@@ -274,6 +330,34 @@ const Register = () => {
                                 :
                                 <></>
                             }
+                            <Row>
+                                <Container className="d-flex justify-content-center">
+                                    <HandleImage/>
+                                </Container>
+                                <Container className="d-flex justify-content-center">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        ref={fileInputRef}
+                                        style={{ display: "none" }}
+                                        onChange={handleFileChange}
+                                    />
+                                    <Button className="mt-4" variant="primary"
+                                            style={{
+                                                background: imgButtonHover ? "#109661FF" : '#2f7157',
+                                                width: isScreenSmall ? '50%' : '40%',
+                                                borderColor: 'white',
+                                                borderRadius: '18px'
+                                            }}
+                                            onMouseEnter={() => setImgButtonHover(true)}
+                                            onMouseOut={() => setImgButtonHover(false)}
+                                            onTouchStart={() => setImgButtonHover(true)}
+                                            onTouchEnd={() => setImgButtonHover(false)}
+                                            onClick={() => handleSelectImage()}>
+                                        Cambia immagine profilo
+                                    </Button>
+                                </Container>
+                            </Row>
                             <Row className="justify-content-between mx-5">
                                 <Col className="mt-3" sm={4}>
                                     <Form.Group>
@@ -441,7 +525,8 @@ const Register = () => {
                                                 background: backHover ? "#109661FF" : 'white',
                                                 width: '50%',
                                                 borderColor: backHover ? "white" : '#2f7157',
-                                                borderRadius: '18px'
+                                                borderRadius: '18px',
+                                                borderWidth: '3px'
                                             }}
                                             onMouseEnter={() => setBackHover(true)}
                                             onMouseOut={() => setBackHover(false)}

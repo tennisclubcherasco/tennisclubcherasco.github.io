@@ -3,40 +3,49 @@ import MyNavbar from "../navbar/navbar";
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
-import {getUser} from "../utils/get_data";
+import {downloadImageFromStorage, getUser} from "../utils/get_data";
 import { useAuth } from "../AuthContext";
+import ScreenResize from "../utils/screen_resize";
+import AccountIcon from "../utils/account_icon";
 
 function PlayerAccount() {
+    const isScreenSmall = ScreenResize(1200)
     const navigate = useNavigate();
     const { userId } = useParams<{userId: string}>();
     const {currentUser, loading} = useAuth();
-    const [isScreenSmall, setIsScreenSmall] = useState(window.matchMedia('(max-width: 1000px)').matches);
     const [user, setUser] = useState<any>(null);
+    const [profileImageURL, setProfileImageURL] = useState<string | null>(null);
     const [accountHover, setAccountHover] = useState(false);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            if (userId) {
-                const userData = await getUser(userId);
-                setUser(userData);
+        const fetchProfileImage = async (profileImagePath: string) => {
+            if (profileImagePath) {
+                try {
+                    const downloadURL = await downloadImageFromStorage(profileImagePath);
+                    setProfileImageURL(downloadURL);
+                } catch (error) {
+                    console.error("Error fetching profile image:", error);
+                }
             }
         };
+
+        const fetchUser = async () => {
+            if (userId) {
+                try {
+                    const userData = await getUser(userId);
+                    setUser(userData);
+                    // Chiamare fetchProfileImage solo quando l'utente è trovato e ha un'immagine
+                    if (userData?.profileImage) {
+                        fetchProfileImage(userData.profileImage);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            }
+        };
+
         fetchUser();
     }, [userId]);
-
-    useEffect(() => {
-        const mediaQueryList1 = window.matchMedia('(max-width: 1200px)');
-
-        const handleResize1 = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {
-            setIsScreenSmall(event.matches);
-        };
-
-        mediaQueryList1.addEventListener('change', handleResize1);
-
-        return () => {
-            mediaQueryList1.removeEventListener('change', handleResize1);
-        };
-    }, []);
 
     const EditButton = () => {
         if (currentUser.uid == userId) {
@@ -68,6 +77,39 @@ function PlayerAccount() {
         }
     }
 
+    const ImageHandler = () => {
+        if (user.profileImage == "") {
+            return (
+                <AccountIcon size={170}/>
+            )
+        }
+        else if (profileImageURL != null) {
+            return (
+                <Container className="p-0"
+                    style={{
+                        width: "150px",
+                        height: "150px",
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                    }}
+                >
+                    <img
+                        src={profileImageURL}
+                        alt="Anteprima immagine"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                        }}
+                    />
+                </Container>
+            )
+        }
+        else return (
+            <AccountIcon size={120}/>
+        )
+    }
+
     if (user != null) {
         return (
             <Container fluid style={{height: "", width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
@@ -76,7 +118,8 @@ function PlayerAccount() {
                     <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
                         <Col className="py-0 my-2 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
                             <Container fluid className="justify-content-center mt-4">
-                                <FaUserCircle style={{ width:'170px', height:'auto', color: 'black', maxWidth: '30%', objectFit: 'scale-down' }} />
+                                {/*<FaUserCircle style={{ width:'170px', height:'auto', color: 'black', maxWidth: '30%', objectFit: 'scale-down' }} />*/}
+                                <ImageHandler/>
                             </Container>
                             <h1 className="my-font mt-3">{user.name} {user.surname}</h1>
                             <Container className="d-flex flex-column mt-4">

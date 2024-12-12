@@ -6,6 +6,7 @@ import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { getDownloadURL, ref } from "firebase/storage";
 import './login.css'
 import { FaComments, FaTrophy, FaUsers } from "react-icons/fa";
+import ScreenResize from "../utils/screen_resize";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -18,21 +19,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [logoUrl, setLogoUrl] = useState('')
     const [logoInvUrl, setLogoInvUrl] = useState('')
-    const [isScreenSmall, setIsScreenSmall] = useState(window.matchMedia('(max-width: 1000px)').matches);
-
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 900px)');
-
-        const handleResize = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {
-            setIsScreenSmall(event.matches);
-        };
-
-        mediaQueryList.addEventListener('change', handleResize);
-
-        return () => {
-            mediaQueryList.removeEventListener('change', handleResize);
-        };
-    }, []);
+    const isScreenSmall = ScreenResize(900);
 
     useEffect(() => {
         const logoRef = ref(storage, 'gs://tennisclubcherasco.appspot.com/utils/logoTennis.png');

@@ -347,14 +347,17 @@ const Register = () => {
                                                 background: imgButtonHover ? "#109661FF" : '#2f7157',
                                                 width: isScreenSmall ? '50%' : '40%',
                                                 borderColor: 'white',
-                                                borderRadius: '18px'
+                                                borderRadius: '18px',
+                                                minHeight: '40px',
                                             }}
                                             onMouseEnter={() => setImgButtonHover(true)}
                                             onMouseOut={() => setImgButtonHover(false)}
                                             onTouchStart={() => setImgButtonHover(true)}
                                             onTouchEnd={() => setImgButtonHover(false)}
                                             onClick={() => handleSelectImage()}>
-                                        Cambia immagine profilo
+                                        <h4 className="my-font" style={{ pointerEvents: "none" }}>
+                                            Seleziona immagine
+                                        </h4>
                                     </Button>
                                 </Container>
                             </Row>
@@ -507,13 +510,17 @@ const Register = () => {
                                                 background: submitHover ? "#109661FF" : '#2f7157',
                                                 width: '50%',
                                                 borderColor: 'white',
-                                                borderRadius: '20px'
+                                                borderRadius: '20px',
+                                                borderWidth: '3px',
+                                                minHeight: '40px',
                                             }}
                                             onMouseEnter={() => setSubmitHover(true)}
                                             onMouseOut={() => setSubmitHover(false)}
                                             onTouchStart={() => setSubmitHover(true)}
                                             onTouchEnd={() => setSubmitHover(false)}>
-                                        Sign Up
+                                        <h5 className="my-font" style={{ pointerEvents: "none" }}>
+                                            Registrati
+                                        </h5>
                                     </Button>
                                 </Container>
                             </Row>
@@ -526,13 +533,16 @@ const Register = () => {
                                                 width: '50%',
                                                 borderColor: backHover ? "white" : '#2f7157',
                                                 borderRadius: '18px',
-                                                borderWidth: '3px'
+                                                borderWidth: '3px',
+                                                minHeight: '40px',
                                             }}
                                             onMouseEnter={() => setBackHover(true)}
                                             onMouseOut={() => setBackHover(false)}
                                             onTouchStart={() => setBackHover(true)}
                                             onTouchEnd={() => setBackHover(false)}>
-                                        Indietro
+                                        <h5 className="my-font" style={{ pointerEvents: "none" }}>
+                                            Indietro
+                                        </h5>
                                     </Button>
                                 </Container>
                             </Row>

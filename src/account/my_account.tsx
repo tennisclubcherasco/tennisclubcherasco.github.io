@@ -57,14 +57,17 @@ function PlayerAccount() {
                                     background: accountHover ? "#109661FF" : '#2f7157',
                                     width: '50%',
                                     borderColor: 'white',
-                                    borderRadius: '18px'
+                                    borderRadius: '18px',
+                                    minHeight: '60px',
                                 }}
                                 onMouseEnter={() => setAccountHover(true)}
                                 onMouseOut={() => setAccountHover(false)}
                                 onTouchStart={() => setAccountHover(true)}
                                 onTouchEnd={() => setAccountHover(false)}
                                 onClick={() => navigate(`/account/${currentUser.uid}/edit`)}>
-                            Modifica profilo
+                            <h4 className="my-font" style={{ pointerEvents: "none" }}>
+                                Modifica profilo
+                            </h4>
                         </Button>
                     </Col>
                 </Row>

@@ -13,16 +13,15 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
-            setLoading(false); // Indica che il caricamento è completato
+            setLoading(false);
         });
 
-        // Pulizia del listener
         return () => unsubscribe();
     }, []);
 
     return (
         <AuthContext.Provider value={{ currentUser, loading }}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };

@@ -185,13 +185,17 @@ const Login = () => {
                                                 background: loginHover ? "#109661FF" : '#2f7157',
                                                 width: '50%',
                                                 borderColor: 'white',
-                                                borderRadius: '18px'
+                                                borderRadius: '18px',
+                                                borderWidth: '3px',
+                                                minHeight: '40px',
                                             }}
                                             onMouseEnter={() => setLoginHover(true)}
                                             onMouseOut={() => setLoginHover(false)}
                                             onTouchStart={() => setLoginHover(true)}
                                             onTouchEnd={() => setLoginHover(false)}>
-                                        Log In
+                                        <h5 className="my-font" style={{ pointerEvents: "none" }}>
+                                            Log In
+                                        </h5>
                                     </Button>
                                 </Col>
                             </Row>
@@ -203,14 +207,18 @@ const Login = () => {
                                                 background: registerHover ? "#109661FF" : 'white',
                                                 width: '50%',
                                                 borderColor: registerHover ? "white" : '#2f7157',
-                                                borderRadius: '18px'
+                                                borderRadius: '18px',
+                                                borderWidth: '3px',
+                                                minHeight: '40px',
                                             }}
                                             onMouseEnter={() => setRegisterHover(true)}
                                             onMouseOut={() => setRegisterHover(false)}
                                             onTouchStart={() => setRegisterHover(true)}
                                             onTouchEnd={() => setRegisterHover(false)}
                                             onClick={() => navigate("/register")}>
-                                        Registrati
+                                        <h5 className="my-font" style={{ pointerEvents: "none" }}>
+                                            Registrati
+                                        </h5>
                                     </Button>
                                 </Col>
                             </Row>

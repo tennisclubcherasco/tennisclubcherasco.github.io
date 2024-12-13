@@ -1,22 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../AuthContext";
 import {downloadImageFromStorage, getUser } from "../utils/get_data";
-import {Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
+import {Alert, Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import MyNavbar from "../navbar/navbar";
 import { FaUserCircle } from "react-icons/fa";
 import ScreenResize from "../utils/screen_resize";
 import AccountIcon from "../utils/account_icon";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
+import { doc, updateDoc } from "firebase/firestore";
+import { db, storage } from "../firebaseConfig";
+import { uploadImage } from "../utils/image_handler";
+import {deleteObject, ref } from "firebase/storage";
 
 function EditAccount() {
+    const navigate = useNavigate();
     const isScreenSmall = ScreenResize(900)
     const {currentUser, loading} = useAuth();
     const [user, setUser] = useState<any>(null);
+
     const [imgButtonHover, setImgButtonHover] = useState(false);
     const [rmvButtonHover, setRmvButtonHover] = useState(false);
     const [submitHover, setSubmitHover] = useState(false);
     const [backHover, setBackHover] = useState(false);
+    const [closeHover, setCloseHover] = useState(false);
+
     const [validated, setValidated] = useState(false);
+    const [updating, setUpdating] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [image, setImage] = useState<File | null>(null);
@@ -25,11 +35,11 @@ function EditAccount() {
 
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const [birthDate, setBirthDate] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [forehand, setForehand] = useState('')
     const [bestShot, setBestShot] = useState('')
+    let updatedData: any = {};
 
     const [error, setError] = useState('')
     const [formErrors, setFormErrors] = useState({
@@ -38,7 +48,6 @@ function EditAccount() {
         birthDate: "",
         email: "",
         phone: "",
-        password: "",
         forehand: "",
         bestShot: ""
     });
@@ -63,7 +72,6 @@ function EditAccount() {
 
                     setName(userData?.name || '');
                     setSurname(userData?.surname || '');
-                    setBirthDate(userData?.birthDate || '');
                     setEmail(userData?.email || '');
                     setPhone(userData?.phone || '');
                     setForehand(userData?.forehand || '');
@@ -81,8 +89,114 @@ function EditAccount() {
         fetchUser();
     }, [currentUser.uid]);
 
-    const handleEdit = async (e: any) => {
+    const checkValidity = () : Boolean => {
+        updatedData = {};
+        let formErrors = {
+            name: "",
+            surname: "",
+            birthDate: "",
+            email: "",
+            phone: "",
+            forehand: "",
+            bestShot: ""
+        };
+        let formValid = true;
 
+        if (name != user.name) {
+            if (!name) {
+                formErrors.name = "Il nome è obbligatorio.";
+                formValid = false;
+            } else {
+                updatedData.name = name;
+            }
+        }
+
+        if (surname != user.surname) {
+            if (!surname) {
+                formErrors.surname = "Il cognome è obbligatorio.";
+                formValid = false;
+            } else {
+                updatedData.surname = surname;
+            }
+        }
+
+        if (email != user.email) {
+            if (!email || !/\S+@\S+\.\S+/.test(email)) {
+                formErrors.email = "Inserisci un'email valida.";
+                formValid = false;
+            } else {
+                updatedData.email = email;
+            }
+        }
+
+        if (phone != user.phone) {
+            if (!phone || !/^\d{10}$/.test(phone)) {
+                formErrors.phone = "Inserisci un numero di telefono valido.";
+                formValid = false;
+            } else {
+                updatedData.phone = phone;
+            }
+        }
+
+        if (forehand != user.forehand) {
+            if (!forehand) {
+                formErrors.forehand = "Seleziona il lato del diritto.";
+                formValid = false;
+            } else {
+                updatedData.forehand = forehand;
+            }
+        }
+
+        if(bestShot != user.bestShot) {
+            if (!bestShot) {
+                formErrors.bestShot = "Seleziona il colpo preferito.";
+                formValid = false;
+            } else {
+                updatedData.bestShot = bestShot;
+            }
+        }
+
+        setFormErrors(formErrors);
+        return formValid;
+    }
+
+    const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (checkValidity() === false) {
+            return;
+        }
+        else {
+            setUpdating(true);
+            setShowModal(true);
+
+            console.log("Edit form valid")
+            setName(name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+            setSurname(surname.charAt(0).toUpperCase() + surname.slice(1).toLowerCase())
+        }
+
+        try {
+            const docRef = doc(db, "users", currentUser.uid);
+
+            if (imagePreview && profileImageURL) {
+                const imageRef = ref(storage, profileImageURL)
+                await deleteObject(imageRef)
+                console.log("image deleted")
+                updatedData.profileImage = await uploadImage(image, currentUser.uid);
+            } else if (imagePreview != "" && !profileImageURL) {
+                updatedData.profileImage = await uploadImage(image, currentUser.uid);
+            }
+
+            setUpdating(true);
+            setShowModal(true);
+            await updateDoc(docRef, updatedData)
+            setUpdating(false);
+
+            console.log("Document successfully updated!");
+        } catch (err) {
+            console.error("Error getting document: ", err);
+        }
     }
 
     const handleSelectImage = () => {
@@ -103,7 +217,7 @@ function EditAccount() {
     };
 
     const HandleImage = () => {
-        if (imagePreview) return (
+        if (imagePreview != null && imagePreview != "") return (
             <Container className="p-0"
                        style={{
                            width: "150px",
@@ -123,7 +237,7 @@ function EditAccount() {
                 />
             </Container>
         )
-        else if (profileImageURL == "") return (
+        else if (imagePreview == "" || profileImageURL == "") return (
             <AccountIcon size={150}/>
         )
         else if (profileImageURL) return (
@@ -155,6 +269,32 @@ function EditAccount() {
         <Container fluid style={{height: "", width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
             <MyNavbar/>
             <Container fluid className="justify-content-center mt-4 p-0" style={{width: isScreenSmall ? "100%" : "80%"}}>
+                <Modal show={showModal}>
+                    <Modal.Body>
+                        <h5 className="my-font">
+                            {updating ? "Aggiornamento in corso..." : "Profilo aggiornato con successo!"}
+                        </h5>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button disabled={updating} className="" variant="primary"
+                                style={{
+                                    background: closeHover ? "#109661FF" : '#2f7157',
+                                    width: isScreenSmall ? '50%' : '20%',
+                                    borderColor: 'white',
+                                    borderRadius: '18px',
+                                    minHeight: '40px',
+                                }}
+                                onMouseEnter={() => setCloseHover(true)}
+                                onMouseOut={() => setCloseHover(false)}
+                                onTouchStart={() => setCloseHover(true)}
+                                onTouchEnd={() => setCloseHover(false)}
+                                onClick={() => navigate(`/account/${currentUser.uid}`)}>
+                            <h6 className="my-font" style={{ pointerEvents: "none" }}>
+                                chiudi
+                            </h6>
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
                 <HandleImage/>
                 <Row className="justify-content-center">
                     <Col style={{width:"50%"}}>
@@ -202,8 +342,7 @@ function EditAccount() {
                                 onTouchEnd={() => setRmvButtonHover(false)}
                                 onClick={() => {
                                     setImage(null);
-                                    setImagePreview(null);
-                                    setProfileImageURL("");
+                                    setImagePreview("");
                                 }}>
                             <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                 Rimuovi immagine
@@ -222,7 +361,7 @@ function EditAccount() {
                         <></>
                     }
                     <Row className="justify-content-between mx-5">
-                        <Col className="mt-3" sm={4}>
+                        <Col className="mt-3" sm={6}>
                             <Form.Group>
                                 <Form.Label>Nome</Form.Label>
                                 <Form.Control
@@ -236,7 +375,7 @@ function EditAccount() {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
-                        <Col className="mt-3" sm={4}>
+                        <Col className="mt-3" sm={6}>
                             <Form.Group>
                                 <Form.Label>Cognome</Form.Label>
                                 <Form.Control
@@ -247,20 +386,6 @@ function EditAccount() {
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {formErrors.surname}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                        <Col className="mt-3" sm={4}>
-                            <Form.Group>
-                                <Form.Label>Data di nascita</Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    value={birthDate}
-                                    onChange={(e) => setBirthDate(e.target.value)}
-                                    isInvalid={!!formErrors.birthDate}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {formErrors.birthDate}
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
@@ -369,11 +494,7 @@ function EditAccount() {
                                 onMouseOut={() => setBackHover(false)}
                                 onTouchStart={() => setBackHover(true)}
                                 onTouchEnd={() => setBackHover(false)}
-                                onClick={() => {
-                                    setImage(null);
-                                    setImagePreview(null);
-                                    setProfileImageURL("");
-                                }}>
+                                onClick={() => navigate(`/account/${currentUser.uid}`)}>
                             <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                 Indietro
                             </h4>

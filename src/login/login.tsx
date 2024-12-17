@@ -1,15 +1,17 @@
 import {useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
-import { sendPasswordResetEmail, signInWithEmailAndPassword,} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth, storage } from "../firebaseConfig";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { getDownloadURL, ref } from "firebase/storage";
 import './login.css'
 import { FaComments, FaTrophy, FaUsers } from "react-icons/fa";
 import ScreenResize from "../utils/screen_resize";
+import { useAuth } from "../AuthContext";
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [validated, setValidated] = useState(false);
     const [alert, setAlert] = useState(false);
     const [resetAlert, setResetAlert] = useState('');
@@ -40,22 +42,17 @@ const Login = () => {
             });
     }, []);
 
-    const onLogin = (e: { preventDefault: () => void; }) => {
+    const onLogin = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                navigate("/main")
-                console.log(user);
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage)
-                setAlert(true);
-                setEmail('');
-                setPassword('');
-            });
+        try {
+            await login(email, password);
+            navigate("/main");
+        } catch (error) {
+            console.log(error)
+            setAlert(true);
+            setEmail('');
+            setPassword('');
+        }
     }
 
     const handlePasswordReset = () => {

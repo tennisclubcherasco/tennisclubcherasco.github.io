@@ -8,6 +8,7 @@ import { MdLogout } from "react-icons/md";
 import './navbar.css'
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import { useAuth } from '../AuthContext';
 
 interface MenuProps {
     show: boolean;
@@ -18,15 +19,14 @@ interface MenuProps {
 
 const MenuOffCanvas: React.FC<MenuProps> = ({ show, setShow, smallScreen, currentUserId }) => {
     const navigate = useNavigate();
+    const { logout, currentUser } = useAuth();
 
     const handleLogout = async () => {
         try {
-            await signOut(auth);
+            await logout();
             navigate("/");
         } catch (error) {
             console.error("Errore nel logout:", error);
-        } finally {
-            setShow(false);
         }
     };
 

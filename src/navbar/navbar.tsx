@@ -42,7 +42,7 @@ function MyNavbar() {
     }, []);
 
     return (
-        <><MenuOffCanvas show={showMenu} setShow={setShowMenu} smallScreen={isScreenSmall} currentUserId={currentUser.uid}/>
+        <><MenuOffCanvas show={showMenu} setShow={setShowMenu} smallScreen={isScreenSmall} currentUserId={currentUser ? currentUser.uid : ""}/>
         {
             isScreenSmall ?
                 <Navbar style={{height: "90px", width: "100%", backgroundColor: "#2f7157"}}

@@ -125,7 +125,7 @@ function PlayerAccount() {
                                         <h3 className="my-font" style={{color:"#2f7157"}}>{user.phone}</h3>
                                     </Col>
                                 </Row>
-                                {currentUser.uid == userId ? <EditButton currentUserId={currentUser.uid}/> : <></>}
+                                {currentUser && currentUser.uid == userId ? <EditButton currentUserId={currentUser ? currentUser.uid : ""}/> : <></>}
                             </Container>
                         </Col>
                         {!isScreenSmall && <Col className="p-0 d-flex flex-column" sm={8}>

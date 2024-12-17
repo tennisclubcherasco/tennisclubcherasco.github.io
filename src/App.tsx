@@ -10,6 +10,7 @@ import { Main } from './main/main'
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import EditAccount from './account/edit_account';
+import MyNavbar from './navbar/navbar';
 
 function App() {
     return (

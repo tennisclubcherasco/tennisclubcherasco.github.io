@@ -3,7 +3,6 @@ import { useAuth } from "../AuthContext";
 import {downloadImageFromStorage, getUser } from "../utils/get_data";
 import {Alert, Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import MyNavbar from "../navbar/navbar";
-import { FaUserCircle } from "react-icons/fa";
 import ScreenResize from "../utils/screen_resize";
 import AccountIcon from "../utils/account_icon";
 import {useNavigate, useParams } from "react-router-dom";
@@ -11,18 +10,13 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
 import { uploadImage } from "../utils/image_handler";
 import {deleteObject, ref } from "firebase/storage";
+import '../App.css';
 
 function EditAccount() {
     const navigate = useNavigate();
     const isScreenSmall = ScreenResize(900)
     const {currentUser, loading} = useAuth();
     const [user, setUser] = useState<any>(null);
-
-    const [imgButtonHover, setImgButtonHover] = useState(false);
-    const [rmvButtonHover, setRmvButtonHover] = useState(false);
-    const [submitHover, setSubmitHover] = useState(false);
-    const [backHover, setBackHover] = useState(false);
-    const [closeHover, setCloseHover] = useState(false);
 
     const [validated, setValidated] = useState(false);
     const [updating, setUpdating] = useState(false);
@@ -276,18 +270,11 @@ function EditAccount() {
                         </h5>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button disabled={updating} className="" variant="primary"
+                        <Button disabled={updating} className="my-button" variant="primary"
                                 style={{
-                                    background: closeHover ? "#109661FF" : '#2f7157',
                                     width: isScreenSmall ? '50%' : '20%',
-                                    borderColor: 'white',
-                                    borderRadius: '18px',
                                     minHeight: '40px',
                                 }}
-                                onMouseEnter={() => setCloseHover(true)}
-                                onMouseOut={() => setCloseHover(false)}
-                                onTouchStart={() => setCloseHover(true)}
-                                onTouchEnd={() => setCloseHover(false)}
                                 onClick={() => navigate(`/account/${currentUser.uid}`)}>
                             <h6 className="my-font" style={{ pointerEvents: "none" }}>
                                 chiudi
@@ -305,18 +292,11 @@ function EditAccount() {
                             style={{ display: "none" }}
                             onChange={handleFileChange}
                         />
-                        <Button className="mt-4" variant="primary" type="submit"
+                        <Button className="my-button mt-4" variant="primary"
                                 style={{
-                                    background: imgButtonHover ? "#109661FF" : '#2f7157',
                                     width: isScreenSmall ? '50%' : '20%',
-                                    borderColor: 'white',
-                                    borderRadius: '18px',
                                     minHeight: '40px',
                                 }}
-                                onMouseEnter={() => setImgButtonHover(true)}
-                                onMouseOut={() => setImgButtonHover(false)}
-                                onTouchStart={() => setImgButtonHover(true)}
-                                onTouchEnd={() => setImgButtonHover(false)}
                                 onClick={() => handleSelectImage()}>
                             <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                 Cambia immagine
@@ -326,20 +306,11 @@ function EditAccount() {
                 </Row>
                 <Row>
                     <Col>
-                        <Button className="mt-4" variant="primary" type="submit"
+                        <Button className="my-button-outlined mt-4" variant="primary"
                                 style={{
-                                    color: rmvButtonHover ? 'white' : '#2f7157',
-                                    background: rmvButtonHover ? "#109661FF" : 'white',
                                     width: isScreenSmall ? '50%' : '20%',
-                                    borderColor: rmvButtonHover ? "white" : '#2f7157',
-                                    borderRadius: '18px',
-                                    borderWidth: '3px',
                                     minHeight: '40px',
                                 }}
-                                onMouseEnter={() => setRmvButtonHover(true)}
-                                onMouseOut={() => setRmvButtonHover(false)}
-                                onTouchStart={() => setRmvButtonHover(true)}
-                                onTouchEnd={() => setRmvButtonHover(false)}
                                 onClick={() => {
                                     setImage(null);
                                     setImagePreview("");
@@ -462,39 +433,23 @@ function EditAccount() {
                         </Col>
                     </Row>
                     <Row className="d-flex justify-content-between mx-5 mt-5 mb-4">
-                        <Button className="mt-4 p-2" variant="primary" type="submit"
+                        <Button className="my-button mt-4 p-2" variant="primary" type="submit"
                                 style={{
-                                    background: submitHover ? "#109661FF" : '#2f7157',
                                     width: isScreenSmall ? '40%' : '25%',
-                                    borderColor: 'white',
-                                    borderRadius: '20px',
                                     minHeight: '60px',
                                     marginLeft: isScreenSmall ? '' : '120px'
-                                }}
-                                onMouseEnter={() => setSubmitHover(true)}
-                                onMouseOut={() => setSubmitHover(false)}
-                                onTouchStart={() => setSubmitHover(true)}
-                                onTouchEnd={() => setSubmitHover(false)}>
+                                }}>
                             <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                 Conferma modifiche
                             </h4>
                         </Button>
-                        <Button className="mt-4 p-1" variant="primary" type="submit"
+                        <Button className="my-button-outlined mt-4 p-1" variant="primary"
                                 style={{
-                                    color: backHover ? 'white' : '#2f7157',
-                                    background: backHover ? "#109661FF" : 'white',
                                     width: isScreenSmall ? '40%' : '25%',
-                                    borderColor: backHover ? "white" : '#2f7157',
-                                    borderRadius: '18px',
-                                    borderWidth: '3px',
                                     minHeight: '60px',
                                     marginRight: isScreenSmall ? '' : '120px'
                                 }}
-                                onMouseEnter={() => setBackHover(true)}
-                                onMouseOut={() => setBackHover(false)}
-                                onTouchStart={() => setBackHover(true)}
-                                onTouchEnd={() => setBackHover(false)}
-                                onClick={() => navigate(`/account/${currentUser.uid}`)}>
+                                onClick={() => navigate(-1)}>
                             <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                 Indietro
                             </h4>

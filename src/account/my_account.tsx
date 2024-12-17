@@ -7,6 +7,7 @@ import {downloadImageFromStorage, getUser} from "../utils/get_data";
 import { useAuth } from "../AuthContext";
 import ScreenResize from "../utils/screen_resize";
 import AccountIcon from "../utils/account_icon";
+import EditButton from "./edit_button";
 
 function PlayerAccount() {
     const isScreenSmall = ScreenResize(1200)
@@ -15,7 +16,6 @@ function PlayerAccount() {
     const {currentUser, loading} = useAuth();
     const [user, setUser] = useState<any>(null);
     const [profileImageURL, setProfileImageURL] = useState<string | null>(null);
-    const [accountHover, setAccountHover] = useState(false);
 
     useEffect(() => {
         const fetchProfileImage = async (profileImagePath: string) => {
@@ -46,39 +46,6 @@ function PlayerAccount() {
 
         fetchUser();
     }, [userId]);
-
-    const EditButton = () => {
-        if (currentUser.uid == userId) {
-            return(
-                <Row>
-                    <Col className="p-0 mt-3">
-                        <Button className="mt-4" variant="primary" type="submit"
-                                style={{
-                                    background: accountHover ? "#109661FF" : '#2f7157',
-                                    width: '50%',
-                                    borderColor: 'white',
-                                    borderRadius: '18px',
-                                    minHeight: '60px',
-                                }}
-                                onMouseEnter={() => setAccountHover(true)}
-                                onMouseOut={() => setAccountHover(false)}
-                                onTouchStart={() => setAccountHover(true)}
-                                onTouchEnd={() => setAccountHover(false)}
-                                onClick={() => navigate(`/account/${currentUser.uid}/edit`)}>
-                            <h4 className="my-font" style={{ pointerEvents: "none" }}>
-                                Modifica profilo
-                            </h4>
-                        </Button>
-                    </Col>
-                </Row>
-            )
-        }
-        else {
-            return (
-                <></>
-            )
-        }
-    }
 
     const ImageHandler = () => {
         if (user.profileImage == "") {
@@ -115,13 +82,13 @@ function PlayerAccount() {
 
     if (user != null) {
         return (
+            <>
+            <MyNavbar/>
             <Container fluid style={{height: "", width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
-                <MyNavbar/>
                 <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
                     <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
                         <Col className="py-0 my-2 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
                             <Container fluid className="justify-content-center mt-4">
-                                {/*<FaUserCircle style={{ width:'170px', height:'auto', color: 'black', maxWidth: '30%', objectFit: 'scale-down' }} />*/}
                                 <ImageHandler/>
                             </Container>
                             <h1 className="my-font mt-3">{user.name} {user.surname}</h1>
@@ -158,7 +125,7 @@ function PlayerAccount() {
                                         <h3 className="my-font" style={{color:"#2f7157"}}>{user.phone}</h3>
                                     </Col>
                                 </Row>
-                                <EditButton/>
+                                {currentUser.uid == userId ? <EditButton currentUserId={currentUser.uid}/> : <></>}
                             </Container>
                         </Col>
                         {!isScreenSmall && <Col className="p-0 d-flex flex-column" sm={8}>
@@ -166,7 +133,7 @@ function PlayerAccount() {
                         </Col>}
                     </Row>
                 </Container>
-            </Container>
+            </Container></>
         );
     }
     else {

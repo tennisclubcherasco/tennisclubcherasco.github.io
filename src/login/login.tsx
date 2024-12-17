@@ -13,8 +13,6 @@ const Login = () => {
     const [validated, setValidated] = useState(false);
     const [alert, setAlert] = useState(false);
     const [resetAlert, setResetAlert] = useState('');
-    const [loginHover, setLoginHover] = useState(false);
-    const [registerHover, setRegisterHover] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [logoUrl, setLogoUrl] = useState('')
@@ -180,19 +178,11 @@ const Login = () => {
                             </Row>
                             <Row className="justify-content-center mx-5 mt-3 mb-4">
                                 <Col sm={8} className="d-flex justify-content-center">
-                                    <Button className="mt-4" variant="primary" type="submit"
+                                    <Button className="my-button mt-4" variant="primary" type="submit"
                                             style={{
-                                                background: loginHover ? "#109661FF" : '#2f7157',
                                                 width: '50%',
-                                                borderColor: 'white',
-                                                borderRadius: '18px',
-                                                borderWidth: '3px',
                                                 minHeight: '40px',
-                                            }}
-                                            onMouseEnter={() => setLoginHover(true)}
-                                            onMouseOut={() => setLoginHover(false)}
-                                            onTouchStart={() => setLoginHover(true)}
-                                            onTouchEnd={() => setLoginHover(false)}>
+                                            }}>
                                         <h5 className="my-font" style={{ pointerEvents: "none" }}>
                                             Log In
                                         </h5>
@@ -201,20 +191,11 @@ const Login = () => {
                             </Row>
                             <Row className="justify-content-center mx-5 mt-3 mb-4">
                                 <Col sm={8} className="d-flex justify-content-center">
-                                    <Button className="" variant="primary"
+                                    <Button className="my-button-outlined" variant="primary"
                                             style={{
-                                                color: registerHover ? 'white' : '#2f7157',
-                                                background: registerHover ? "#109661FF" : 'white',
                                                 width: '50%',
-                                                borderColor: registerHover ? "white" : '#2f7157',
-                                                borderRadius: '18px',
-                                                borderWidth: '3px',
                                                 minHeight: '40px',
                                             }}
-                                            onMouseEnter={() => setRegisterHover(true)}
-                                            onMouseOut={() => setRegisterHover(false)}
-                                            onTouchStart={() => setRegisterHover(true)}
-                                            onTouchEnd={() => setRegisterHover(false)}
                                             onClick={() => navigate("/register")}>
                                         <h5 className="my-font" style={{ pointerEvents: "none" }}>
                                             Registrati

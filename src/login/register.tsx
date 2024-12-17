@@ -20,8 +20,6 @@ const Register = () => {
     const [logoInvUrl, setLogoInvUrl] = useState('')
     const [logoUrl, setLogoUrl] = useState('')
     const [validated, setValidated] = useState(false);
-    const [submitHover, setSubmitHover] = useState(false);
-    const [backHover, setBackHover] = useState(false);
     const [imgButtonHover, setImgButtonHover] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -505,19 +503,11 @@ const Register = () => {
                             </Row>
                             <Row className="mx-5 mt-3 mb-4">
                                 <Container fluid className="d-flex justify-content-center">
-                                    <Button className="mt-4" variant="primary" type="submit"
+                                    <Button className="my-button mt-4" variant="primary" type="submit"
                                             style={{
-                                                background: submitHover ? "#109661FF" : '#2f7157',
                                                 width: '50%',
-                                                borderColor: 'white',
-                                                borderRadius: '20px',
-                                                borderWidth: '3px',
                                                 minHeight: '40px',
-                                            }}
-                                            onMouseEnter={() => setSubmitHover(true)}
-                                            onMouseOut={() => setSubmitHover(false)}
-                                            onTouchStart={() => setSubmitHover(true)}
-                                            onTouchEnd={() => setSubmitHover(false)}>
+                                            }}>
                                         <h5 className="my-font" style={{ pointerEvents: "none" }}>
                                             Registrati
                                         </h5>
@@ -526,20 +516,11 @@ const Register = () => {
                             </Row>
                             <Row className="mx-5 mt-3 mb-4">
                                 <Container fluid className="d-flex justify-content-center">
-                                    <Button className="" variant="primary" type="button" onClick={() => navigate('/')}
+                                    <Button className="my-button-outlined " variant="primary" type="button" onClick={() => navigate(-1)}
                                             style={{
-                                                color: backHover ? 'white' : '#2f7157',
-                                                background: backHover ? "#109661FF" : 'white',
                                                 width: '50%',
-                                                borderColor: backHover ? "white" : '#2f7157',
-                                                borderRadius: '18px',
-                                                borderWidth: '3px',
                                                 minHeight: '40px',
-                                            }}
-                                            onMouseEnter={() => setBackHover(true)}
-                                            onMouseOut={() => setBackHover(false)}
-                                            onTouchStart={() => setBackHover(true)}
-                                            onTouchEnd={() => setBackHover(false)}>
+                                            }}>
                                         <h5 className="my-font" style={{ pointerEvents: "none" }}>
                                             Indietro
                                         </h5>

@@ -1,5 +1,7 @@
 import {getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {db, storage } from "../firebaseConfig";
+import AccountIcon from "./account_icon";
+import { Container } from "react-bootstrap";
 
 const uploadImage = async (
     image: File | null,
@@ -26,4 +28,33 @@ const uploadImage = async (
     }
 };
 
-export { uploadImage };
+const ImageHandler = ({ size, imageUrl }: { size: number, imageUrl: string | null }) => {
+    if(imageUrl === null || imageUrl === "") {
+        return (
+            <AccountIcon size={size}/>
+        )
+    } else {
+        return (
+            <Container className="p-0"
+                       style={{
+                           width: size + "px",
+                           height: size + "px",
+                           borderRadius: "50%",
+                           overflow: "hidden",
+                       }}
+            >
+                <img
+                    src={imageUrl}
+                    alt="Anteprima immagine"
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                    }}
+                />
+            </Container>
+        )
+    }
+}
+
+export { uploadImage, ImageHandler };

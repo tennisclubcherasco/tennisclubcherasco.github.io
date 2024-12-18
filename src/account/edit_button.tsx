@@ -10,7 +10,7 @@ const EditButton: React.FC<EditButtonProps> = ({ currentUserId }) => {
 
     return(
         <Row>
-            <Col className="p-0 mt-3">
+            <Col className="p-0 mt-2">
                 <Button className="my-button mt-4" variant="primary" type="submit"
                         style={{
                             width: '50%',

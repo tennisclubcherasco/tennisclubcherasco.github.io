@@ -10,7 +10,7 @@ import { Main } from './main/main'
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import EditAccount from './account/edit_account';
-import MyNavbar from './navbar/navbar';
+import NewMatch from './new_match/new_match';
 
 function App() {
     return (
@@ -23,6 +23,7 @@ function App() {
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/account/:userId" element={<PlayerAccount/>}/>
                         <Route path="/account/:userId/edit" element={<EditAccount/>}/>
+                        <Route path="/newMatch" element={<NewMatch/>}/>
                     </Routes>
                 </Container>
             </HashRouter>

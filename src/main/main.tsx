@@ -37,7 +37,7 @@ function Main() {
     }, []);
 
     return(
-        <Container fluid style={{height: "", width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
+        <Container fluid style={{width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
             <MyNavbar/>
             <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
                 <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>

@@ -1,19 +1,30 @@
 type Player = {
-    id: number;
-    nome: string;
-    cognome: string;
-    eta: number;
+    uid: string;
+    name: string;
+    surname: string;
+    birthDate: string;
+    email: string;
+    phone: string;
     ranking: number;
     bestRanking: number;
-    punteggio: number;
+    score: number;
+    forehand: string;
+    bestShot: string;
+    profileImage: string;
 };
 
 type Match = {
-    id: number;
-    player1ID: number;
-    player2ID: number;
+    id: string;
+    player1ID: string;
+    player2ID: string;
     score: string;
     date: string;
 }
 
-export type { Player, Match };
+type Score = {
+    setNumber: number;
+    player1: number;
+    player2: number;
+}[];
+
+export type { Player, Match, Score };

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../AuthContext";
-import {downloadImageFromStorage, getUser } from "../utils/get_data";
+import {downloadImageFromStorage, fetchProfileImage, getUser } from "../utils/get_data";
 import {Alert, Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import MyNavbar from "../navbar/navbar";
 import ScreenResize from "../utils/screen_resize";
@@ -15,7 +15,7 @@ import '../App.css';
 function EditAccount() {
     const navigate = useNavigate();
     const isScreenSmall = ScreenResize(900)
-    const {currentUser, loading} = useAuth();
+    const {currentUser} = useAuth();
     const [user, setUser] = useState<any>(null);
 
     const [validated, setValidated] = useState(false);
@@ -47,15 +47,9 @@ function EditAccount() {
     });
 
     useEffect(() => {
-        const fetchProfileImage = async (profileImagePath: string) => {
-            if (profileImagePath) {
-                try {
-                    const downloadURL = await downloadImageFromStorage(profileImagePath);
-                    setProfileImageURL(downloadURL);
-                } catch (error) {
-                    console.error("Error fetching profile image:", error);
-                }
-            }
+        const loadProfileImage = async (imageURL: string) => {
+            const downloadURL = await fetchProfileImage(imageURL);
+            if(downloadURL) setProfileImageURL(downloadURL);
         };
 
         const fetchUser = async () => {
@@ -72,7 +66,7 @@ function EditAccount() {
                     setBestShot(userData?.bestShot || '');
 
                     if (userData?.profileImage) {
-                        fetchProfileImage(userData.profileImage);
+                        loadProfileImage(userData.profileImage);
                     }
                 } catch (error) {
                     console.error("Error fetching user data:", error);
@@ -173,7 +167,7 @@ function EditAccount() {
         try {
             const docRef = doc(db, "users", currentUser.uid);
 
-            if (imagePreview && profileImageURL) {
+            if ((imagePreview || imagePreview=="") && profileImageURL) {
                 const imageRef = ref(storage, profileImageURL)
                 await deleteObject(imageRef)
                 console.log("image deleted")
@@ -260,7 +254,7 @@ function EditAccount() {
     }
 
     return (
-        <Container fluid style={{height: "", width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
+        <Container fluid style={{width: "100%"}} className="d-flex flex-column justify-content-center text-center m-0 p-0">
             <MyNavbar/>
             <Container fluid className="justify-content-center mt-4 p-0" style={{width: isScreenSmall ? "100%" : "80%"}}>
                 <Modal show={showModal}>

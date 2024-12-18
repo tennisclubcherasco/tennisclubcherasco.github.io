@@ -7,10 +7,21 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { FaUserCircle } from "react-icons/fa";
 import { Container } from "react-bootstrap";
-import { players } from "../utils/static_data";
+import { useEffect, useState } from "react";
+import { getAllUsers } from "../utils/get_data";
 
 const Ranking: React.FC<{ isScreenSmall: Boolean }> = ({isScreenSmall}) => {
     const pad = isScreenSmall ? "p-2" : ""
+    const [allPlayers, setAllPlayers] = useState<Player[]>([]);
+
+    useEffect(() => {
+        const fetchAllUsers = async () => {
+            const users = await getAllUsers();
+            setAllPlayers(users);
+        };
+
+        fetchAllUsers();
+    }, []);
 
     const TableEntry = ({ player }: { player: Player }) => {
         const CircleWithNumber: React.FC<{ color: string; bordercolor: string; number: number }> = ({ color, bordercolor, number }) => {
@@ -82,14 +93,14 @@ const Ranking: React.FC<{ isScreenSmall: Boolean }> = ({isScreenSmall}) => {
                         <FaUserCircle style={{ width: isScreenSmall ? '35px' : '45px', height: 'auto', color: 'black' }} />
                     </div>
                     <div style={{ display: "inline-block", verticalAlign: "middle", wordBreak: "break-word" }}>
-                        {player.nome}
+                        {player.name}
                         {isScreenSmall ? <br/> : " "}
-                        {player.cognome}
+                        {player.surname}
                     </div>
                 </TableCell>
-                {!isScreenSmall && <TableCell align="center" style={{fontSize: "1.2em"}}>{player.eta}</TableCell>}
+                {!isScreenSmall && <TableCell align="center" style={{fontSize: "1.2em"}}>{player.birthDate}</TableCell>}
                 {!isScreenSmall && <TableCell align="center" style={{fontSize: "1.2em"}}>{player.bestRanking}</TableCell>}
-                <TableCell className={isScreenSmall ? "p-0" : ""} align="center" style={{fontSize: isScreenSmall ? "1.0em" : "1.2em"}}>{player.punteggio}</TableCell>
+                <TableCell className={isScreenSmall ? "p-0" : ""} align="center" style={{fontSize: isScreenSmall ? "1.0em" : "1.2em"}}>{player.score}</TableCell>
             </TableRow>
         )
     }
@@ -108,7 +119,7 @@ const Ranking: React.FC<{ isScreenSmall: Boolean }> = ({isScreenSmall}) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {players.sort((a, b) => a.ranking - b.ranking).map((player) => (
+                        {allPlayers.sort((a, b) => a.ranking - b.ranking).map((player) => (
                             <TableEntry player={player}/>
                         ))}
                     </TableBody>

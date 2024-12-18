@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaRankingStar } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
+import { MdOutlineScoreboard } from "react-icons/md";
 import './navbar.css'
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
 import { useAuth } from '../AuthContext';
 
 interface MenuProps {
@@ -23,8 +22,8 @@ const MenuOffCanvas: React.FC<MenuProps> = ({ show, setShow, smallScreen, curren
 
     const handleLogout = async () => {
         try {
-            await logout();
             navigate("/");
+            await logout();
         } catch (error) {
             console.error("Errore nel logout:", error);
         }
@@ -43,6 +42,15 @@ const MenuOffCanvas: React.FC<MenuProps> = ({ show, setShow, smallScreen, curren
                     <ListGroup variant="flush">
                         <ListGroup.Item className="menu-item my-font" onClick={() => {
                             setShow(false);
+                            navigate(`/account/${currentUserId}`);
+                        }}>
+                            <FaUserCircle style={{width:"40px", height:"auto"}}/>
+                            <h4 className="ms-3 mb-0">
+                                Il mio profilo
+                            </h4>
+                        </ListGroup.Item>
+                        <ListGroup.Item className="menu-item my-font" onClick={() => {
+                            setShow(false);
                             navigate("/main");
                         }}>
                             <FaRankingStar style={{width:"40px", height:"auto"}}/>
@@ -52,11 +60,11 @@ const MenuOffCanvas: React.FC<MenuProps> = ({ show, setShow, smallScreen, curren
                         </ListGroup.Item>
                         <ListGroup.Item className="menu-item my-font" onClick={() => {
                             setShow(false);
-                            navigate(`/account/${currentUserId}`);
+                            navigate("/newMatch");
                         }}>
-                            <FaUserCircle style={{width:"40px", height:"auto"}}/>
+                            <MdOutlineScoreboard style={{width:"40px", height:"auto"}}/>
                             <h4 className="ms-3 mb-0">
-                                Il mio profilo
+                                Inserisci risultato
                             </h4>
                         </ListGroup.Item>
                     </ListGroup>

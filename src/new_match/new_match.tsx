@@ -86,13 +86,13 @@ const NewMatch = () => {
                         borderColor:"#24644c"
                     }}>
                         <Card.Body>
-                            <ImageHandler size={isScreenSmall ? 110 : 160} imageUrl={profileImageURL1}/>
-                            <h2 className="my-font mt-2">
+                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL1}/>
+                            <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
                                 {player1?.name} {player1?.surname}
-                            </h2>
-                            <h5 className="my-font">
+                            </p>
+                            <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
                                 Ranked: 12
-                            </h5>
+                            </p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -111,13 +111,13 @@ const NewMatch = () => {
                         borderColor:"#24644c"
                     }}>
                         <Card.Body>
-                            <ImageHandler size={isScreenSmall ? 110 : 160} imageUrl={profileImageURL2}/>
-                            <h2  className="my-font mt-2">
+                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL2}/>
+                            <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
                                 {player2 ? player2.name + " " + player2.surname : "Seleziona avversario"}
-                            </h2>
-                            <h5 className="my-font">
+                            </p>
+                            <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
                                 {player2 && "Ranked: "} {player2 && player2.ranking}
-                            </h5>
+                            </p>
                         </Card.Body>
                     </Card>
                 </Col>

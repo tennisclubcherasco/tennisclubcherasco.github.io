@@ -7,12 +7,16 @@ import { FaUserCircle } from "react-icons/fa";
 import { GrMenu } from "react-icons/gr";
 import { useAuth } from "../AuthContext";
 import MenuOffCanvas from "./menu_offcanvas";
+import ScreenResize from "../utils/screen_resize";
+import {fetchProfileImage, getUser } from "../utils/get_data";
+import { ImageHandler } from "../utils/image_handler";
 
 function MyNavbar() {
     const navigate = useNavigate();
-    const [logoInvUrl, setLogoInvUrl] = useState('')
-    const [isScreenSmall, setIsScreenSmall] = useState(window.matchMedia('(max-width: 1000px)').matches);
+    const isScreenSmall = ScreenResize(850);
     const {currentUser, loading} = useAuth();
+    const [profileImageURL, setProfileImageURL] = useState<string | null>(null);
+    const [logoInvUrl, setLogoInvUrl] = useState('');
     const [showMenu, setShowMenu] = useState(false);
 
     useEffect(() => {
@@ -28,18 +32,27 @@ function MyNavbar() {
     }, []);
 
     useEffect(() => {
-        const mediaQueryList = window.matchMedia('(max-width: 850px)');
+        const loadProfileImage = async (imageURL: string) => {
+            const downloadURL = await fetchProfileImage(imageURL);
+            if(downloadURL) setProfileImageURL(downloadURL);
+        }
 
-        const handleResize = (event: { matches: boolean | ((prevState: boolean) => boolean); }) => {
-            setIsScreenSmall(event.matches);
+        const fetchUser = async () => {
+            if (currentUser.uid) {
+                try {
+                    const userData = await getUser(currentUser.uid);
+
+                    if (userData?.profileImage) {
+                        loadProfileImage(userData.profileImage);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            }
         };
 
-        mediaQueryList.addEventListener('change', handleResize);
-
-        return () => {
-            mediaQueryList.removeEventListener('change', handleResize);
-        };
-    }, []);
+        fetchUser();
+    }, [currentUser.uid]);
 
     return (
         <><MenuOffCanvas show={showMenu} setShow={setShowMenu} smallScreen={isScreenSmall} currentUserId={currentUser.uid}/>
@@ -59,8 +72,7 @@ function MyNavbar() {
                         onClick={() => navigate("/main")}
                     />
                     <div className="me-3 d-flex align-items-center">
-                        <FaUserCircle style={{width: '30px', height: 'auto', color: 'white', cursor: 'pointer'}}
-                                      onClick={() => navigate(`/account/${currentUser.uid}`)}/>
+                        <ImageHandler size={55} imageUrl={profileImageURL}/>
                     </div>
                 </Navbar>
                 :
@@ -79,8 +91,7 @@ function MyNavbar() {
                         </h1>
                     </NavbarBrand>
                     <div className="me-4 d-flex align-items-center">
-                        <FaUserCircle style={{width: '45px', height: 'auto', color: 'white', cursor: 'pointer'}}
-                                    onClick={() => navigate(`/account/${currentUser.uid}`)}/>
+                        <ImageHandler size={55} imageUrl={profileImageURL}/>
                         <GrMenu className="ms-5" style={{width: '45px', height: 'auto', color: 'white', cursor: 'pointer'}}
                                     onClick={() => setShowMenu(true)}/>
                     </div>

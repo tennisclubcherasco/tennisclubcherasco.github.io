@@ -6,7 +6,8 @@
 
 .my-button.btn-primary {
     background: #2f7157;
-    border-color: white;
+    border-color: #2f7157;
+    border-width: 3px;
     border-radius: 20px;
 }
 
@@ -21,7 +22,7 @@
     background: white;
     border-color: #2f7157;
     border-width: 3px;
-    border-radius: 18px;
+    border-radius: 20px;
 }
 
 .my-button-outlined.btn-primary:active,
@@ -29,4 +30,10 @@
     color: white !important;
     background: #109661FF !important;
     border-color: white !important;
+}
+
+@media (min-width: 10px) {
+    .modal {
+        --bs-modal-margin: 3rem !important;
+    }
 }

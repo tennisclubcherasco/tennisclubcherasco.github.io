@@ -1,13 +1,15 @@
-import {Button, Container, Form } from "react-bootstrap";
+import {Alert, Button, Container, Form } from "react-bootstrap";
 import { Score } from "../utils/types";
 
 interface MatchScoreProps {
     score: Score;
     setScore: React.Dispatch<React.SetStateAction<Score>>;
     isScreenSmall: boolean;
+    showAlert: boolean;
+    setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MatchScore: React.FC<MatchScoreProps> = ({ score, setScore, isScreenSmall }) => {
+const MatchScore: React.FC<MatchScoreProps> = ({ score, setScore, isScreenSmall, showAlert, setShowAlert }) => {
     const addSet = () => {
         const newSet = {
             setNumber: score.length + 1,
@@ -23,31 +25,55 @@ const MatchScore: React.FC<MatchScoreProps> = ({ score, setScore, isScreenSmall 
     };
 
     return(
-        <>{score.map((set) => {
+        <>
+            <Alert className="mb-0 mt-3" show={showAlert} variant="danger" style={{width:"80%"}} onClose={() => setShowAlert(false)} dismissible>
+                <h6 className="my-font">
+                    Punteggio non valido.
+                </h6>
+            </Alert>
+            {score.map((set) => {
             return (<>
                 <h3 className="mt-4 my-font">
                     Set {set.setNumber}
                 </h3>
                 <Container className="mt-2 d-flex justify-content-center">
                     <Form.Group className="me-4" style={{width:isScreenSmall ? "30%" : "10%"}}>
-                        <Form.Control min={0} max={7} type="number" style={{borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}} value={set.player1} onChange={(e) => {
+                        <Form.Select style={{borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}} value={set.player1} onChange={(e) => {
                             const value = parseInt(e.target.value);
                             if (value >= 0 && value <= 7) {
                                 const newScore = [...score];
                                 newScore[set.setNumber - 1].player1 = parseInt(e.target.value);
                                 setScore(newScore);
                             }
-                        }}/>
+                        }}>
+                            <option value={0}>0</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                        </Form.Select>
                     </Form.Group>
                     <Form.Group className="ms-4" style={{width:isScreenSmall ? "30%" : "10%"}}>
-                        <Form.Control min={0} max={7} type="number" style={{borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}} value={set.player2} onChange={(e) => {
+                        <Form.Select style={{borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}} onChange={(e) => {
                             const value = parseInt(e.target.value);
                             if (value >= 0 && value <= 7) {
                                 const newScore = [...score];
                                 newScore[set.setNumber - 1].player2 = parseInt(e.target.value);
                                 setScore(newScore);
                             }
-                        }}/>
+                        }}>
+                            <option value={0}>0</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                        </Form.Select>
                     </Form.Group>
                 </Container></>
             )

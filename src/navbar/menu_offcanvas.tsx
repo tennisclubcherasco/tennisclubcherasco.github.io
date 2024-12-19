@@ -30,7 +30,7 @@ const MenuOffCanvas: React.FC<MenuProps> = ({ show, setShow, smallScreen, curren
     };
 
     return (
-        <Offcanvas show={show} onHide={() => setShow(false)} style={{backgroundColor:"#2f7157", color:"white", width:smallScreen ? "50%" : "25%"}} placement={smallScreen ? "start" : "end"}>
+        <Offcanvas show={show} onHide={() => setShow(false)} style={{backgroundColor:"#2f7157", color:"white", width:smallScreen ? "65%" : "28%"}} placement={smallScreen ? "start" : "end"}>
             <Offcanvas.Header closeButton style={{color:"white"}}>
                 <Offcanvas.Title>
                     <h2 className="ms-3 my-font">
@@ -45,27 +45,27 @@ const MenuOffCanvas: React.FC<MenuProps> = ({ show, setShow, smallScreen, curren
                             navigate(`/account/${currentUserId}`);
                         }}>
                             <FaUserCircle style={{width:"40px", height:"auto"}}/>
-                            <h4 className="ms-3 mb-0">
+                            <h5 className="ms-3 mb-0">
                                 Il mio profilo
-                            </h4>
+                            </h5>
                         </ListGroup.Item>
                         <ListGroup.Item className="menu-item my-font" onClick={() => {
                             setShow(false);
                             navigate("/main");
                         }}>
                             <FaRankingStar style={{width:"40px", height:"auto"}}/>
-                            <h4 className="ms-3 mb-0">
+                            <h5 className="ms-3 mb-0">
                                 Ranking
-                            </h4>
+                            </h5>
                         </ListGroup.Item>
                         <ListGroup.Item className="menu-item my-font" onClick={() => {
                             setShow(false);
                             navigate("/newMatch");
                         }}>
                             <MdOutlineScoreboard style={{width:"40px", height:"auto"}}/>
-                            <h4 className="ms-3 mb-0">
+                            <h5 className="ms-3 mb-0">
                                 Inserisci risultato
-                            </h4>
+                            </h5>
                         </ListGroup.Item>
                     </ListGroup>
                     <ListGroup variant="flush">

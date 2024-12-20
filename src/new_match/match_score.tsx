@@ -1,5 +1,7 @@
 import {Alert, Button, Container, Form } from "react-bootstrap";
 import { Score } from "../utils/types";
+import "../App.css";
+import { FormStyle } from "../utils/utility";
 
 interface MatchScoreProps {
     score: Score;
@@ -38,7 +40,7 @@ const MatchScore: React.FC<MatchScoreProps> = ({ score, setScore, isScreenSmall,
                 </h3>
                 <Container className="mt-2 d-flex justify-content-center">
                     <Form.Group className="me-4" style={{width:isScreenSmall ? "30%" : "10%"}}>
-                        <Form.Select style={{borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}} value={set.player1} onChange={(e) => {
+                        <Form.Select style={FormStyle} value={set.player1} onChange={(e) => {
                             const value = parseInt(e.target.value);
                             if (value >= 0 && value <= 7) {
                                 const newScore = [...score];
@@ -57,7 +59,7 @@ const MatchScore: React.FC<MatchScoreProps> = ({ score, setScore, isScreenSmall,
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="ms-4" style={{width:isScreenSmall ? "30%" : "10%"}}>
-                        <Form.Select style={{borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}} onChange={(e) => {
+                        <Form.Select style={FormStyle} onChange={(e) => {
                             const value = parseInt(e.target.value);
                             if (value >= 0 && value <= 7) {
                                 const newScore = [...score];

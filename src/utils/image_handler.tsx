@@ -35,7 +35,7 @@ const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, im
         )
     } else {
         return (
-            <Container className="p-0"
+            <Container className="p-0 m-0"
                        style={{
                            width: (size+6) + "px", // Larghezza del cerchio
                            height: (size+6) + "px", // Altezza del cerchio (uguale alla larghezza)
@@ -47,7 +47,7 @@ const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, im
                            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Aggiungi un'ombra opzionale
                        }}
             >
-                <Container className="p-0"
+                <Container className="p-0 m-0"
                            style={{
                                width: size + "px",
                                height: size + "px",

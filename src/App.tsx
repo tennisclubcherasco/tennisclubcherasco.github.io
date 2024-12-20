@@ -5,7 +5,7 @@ import { storage } from './firebaseConfig';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './login/login'
 import Register from './login/register'
-import PlayerAccount from './account/my_account'
+import PlayerAccount from './account/account_info'
 import { Main } from './main/main'
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';

@@ -9,4 +9,6 @@ const calculateAge = (date: string) => {
     return age;
 }
 
-export { calculateAge };
+const FormStyle = {borderRadius:"40px", border:"solid", borderWidth:"2px", borderColor:"#24644c"}
+
+export { calculateAge, FormStyle };

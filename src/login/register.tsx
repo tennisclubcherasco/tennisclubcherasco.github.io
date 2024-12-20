@@ -13,6 +13,7 @@ import ScreenResize from "../utils/screen_resize";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { uploadImage } from "../utils/image_handler";
+import { FormStyle } from "../utils/utility";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -366,6 +367,7 @@ const Register = () => {
                                         <Form.Control
                                             type="text"
                                             value={name}
+                                            style={FormStyle}
                                             onChange={(e) => setName(e.target.value)}
                                             isInvalid={!!formErrors.name}
                                         />
@@ -380,6 +382,7 @@ const Register = () => {
                                         <Form.Control
                                             type="text"
                                             value={surname}
+                                            style={FormStyle}
                                             onChange={(e) => setSurname(e.target.value)}
                                             isInvalid={!!formErrors.surname}
                                         />
@@ -394,6 +397,7 @@ const Register = () => {
                                         <Form.Control
                                             type="date"
                                             value={birthDate}
+                                            style={FormStyle}
                                             onChange={(e) => setBirthDate(e.target.value)}
                                             isInvalid={!!formErrors.birthDate}
                                         />
@@ -410,6 +414,7 @@ const Register = () => {
                                         <Form.Control
                                             type="email"
                                             value={email}
+                                            style={FormStyle}
                                             onChange={(e) => setEmail(e.target.value)}
                                             isInvalid={!!formErrors.email}
                                         />
@@ -424,6 +429,7 @@ const Register = () => {
                                         <Form.Control
                                             type="text"
                                             value={phone}
+                                            style={FormStyle}
                                             onChange={(e) => setPhone(e.target.value)}
                                             isInvalid={!!formErrors.phone}
                                         />
@@ -439,6 +445,7 @@ const Register = () => {
                                     <Form.Control
                                         type="password"
                                         value={password}
+                                        style={FormStyle}
                                         onChange={(e) => setPassword(e.target.value)}
                                         isInvalid={!!formErrors.password}
                                     />
@@ -456,6 +463,7 @@ const Register = () => {
                                     <Form.Control
                                         type="password"
                                         value={passwordRepeat}
+                                        style={FormStyle}
                                         onChange={(e) => setPasswordRepeat(e.target.value)}
                                     />
                                 </Form.Group>
@@ -466,6 +474,7 @@ const Register = () => {
                                         <Form.Label>Lato diritto</Form.Label>
                                         <Form.Select
                                             value={forehand}
+                                            style={FormStyle}
                                             onChange={(e) => setForehand(e.target.value)}
                                             isInvalid={!!formErrors.forehand}
                                         >
@@ -483,6 +492,7 @@ const Register = () => {
                                         <Form.Label>Colpo preferito</Form.Label>
                                         <Form.Select
                                             value={bestShot}
+                                            style={FormStyle}
                                             onChange={(e) => setBestShot(e.target.value)}
                                             isInvalid={!!formErrors.bestShot}
                                         >

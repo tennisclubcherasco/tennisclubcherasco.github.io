@@ -279,7 +279,7 @@ const NewMatch = () => {
                 </Col>
             </Row>
             <Row className="d-flex justify-content-center mt-5 mx-0">
-                <Col className="ms-0 p-0" xs={isScreenSmall ? 5 : 3}>
+                <Col className="ms-0 p-0 justify-content-center" xs={isScreenSmall ? 5 : 3}>
                     <Card className={cardMargin ? "h-100 mx-0" : "h-100 mx-5"} style={{
                         borderRadius:"40px",
                         color:"#2f7157",
@@ -288,7 +288,7 @@ const NewMatch = () => {
                         borderWidth:"5px",
                         borderColor:"#24644c"
                     }}>
-                        <Card.Body className="px-1">
+                        <Card.Body className="px-1 d-flex flex-column align-items-center">
                             <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL1} backColor={"#2f7157"}/>
                             <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
                                 {player1?.name} {player1?.surname}
@@ -313,7 +313,7 @@ const NewMatch = () => {
                         borderWidth:"5px",
                         borderColor:"#24644c"
                     }}>
-                        <Card.Body className="px-1">
+                        <Card.Body className="px-1 d-flex flex-column align-items-center">
                             <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL2} backColor={"#2f7157"}/>
                             <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
                                 {player2 ? player2.name + " " + player2.surname : "Seleziona avversario"}

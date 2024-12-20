@@ -77,7 +77,7 @@ async function getLastNMatches(n: number) {
             date: doc.data().date,
         }));
 
-        return matches.sort((m1, m2) => m1.date > m2.date ? 1 : -1).slice(0, n);
+        return matches.sort((m1, m2) => m1.date > m2.date ? -1 : 1).slice(0, n);
     } catch (error) {
         console.error("Error fetching matches:", error);
         return [];

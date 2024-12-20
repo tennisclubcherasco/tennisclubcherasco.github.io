@@ -1,9 +1,9 @@
-import {Container, TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import { Player } from "../utils/types";
 import { useEffect, useState } from "react";
 import { fetchProfileImage } from "../utils/get_data";
 import { ImageHandler } from "../utils/image_handler";
-import { calculateAge } from "../utils/utils_functions";
+import { calculateAge } from "../utils/utility";
 
 interface TableEntryProps {
     player: Player;
@@ -84,7 +84,7 @@ const TableEntry: React.FC<TableEntryProps> = ({ player, isScreenSmall }) => {
                 className={isScreenSmall ? "p-0" : ""}
                 align="left"
                 style={{
-                    fontSize: isScreenSmall ? "1.2em" : "1.5em",
+                    fontSize: isScreenSmall ? "1.1em" : "1.5em",
                     fontFamily: "Oswald",
                     padding: "0",
                     wordWrap: "break-word",
@@ -94,7 +94,7 @@ const TableEntry: React.FC<TableEntryProps> = ({ player, isScreenSmall }) => {
                 <div style={{ display: "inline-block", verticalAlign: "middle", width: "45px", marginRight: "10px" }}>
                     <ImageHandler size={45} imageUrl={profileImageURL} backColor={"#2f7157"}/>
                 </div>
-                <div style={{ display: "inline-block", verticalAlign: "middle", wordBreak: "break-word" }}>
+                <div className="ms-2" style={{ display: "inline-block", verticalAlign: "middle", wordBreak: "break-word" }}>
                     {player.name}
                     {isScreenSmall ? <br/> : " "}
                     {player.surname}

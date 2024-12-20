@@ -57,21 +57,29 @@ function MyNavbar() {
         <><MenuOffCanvas show={showMenu} setShow={setShowMenu} smallScreen={isScreenSmall} currentUserId={currentUser.uid}/>
         {
             isScreenSmall ?
-                <Navbar style={{height: "90px", width: "100%", backgroundColor: "#2f7157"}}
-                        className="d-flex justify-content-between">
-                    <div className="d-flex ms-3">
-                        <GrMenu className="" style={{width: '30px', height: 'auto', color: 'white', cursor: 'pointer'}}
-                                    onClick={() => setShowMenu(true)}/>
+                <Navbar style={{ height: "90px", width: "100%", backgroundColor: "#2f7157" }} className="d-flex align-items-center">
+                    <div className="d-flex align-items-center ms-1" style={{ flex: 1, justifyContent: "start", paddingLeft: "10px" }}>
+                        <GrMenu
+                            style={{ width: "30px", height: "auto", color: "white", cursor: "pointer" }}
+                            onClick={() => setShowMenu(true)}
+                        />
                     </div>
-                    <img
-                        src={logoInvUrl}
-                        className="img-fluid"
-                        style={{width: '75px', height: 'auto'}}
-                        alt="Logo"
-                        onClick={() => navigate("/main")}
-                    />
-                    <div className="me-3 d-flex align-items-center">
-                        <ImageHandler size={55} imageUrl={profileImageURL} onClick={() => navigate(`/account/${currentUser.uid}`)} backColor={"white"}/>
+                    <div style={{ flex: 1, textAlign: "center" }}>
+                        <img
+                            src={logoInvUrl}
+                            className="img-fluid"
+                            style={{ width: "75px", height: "auto", cursor: "pointer" }}
+                            alt="Logo"
+                            onClick={() => navigate("/main")}
+                        />
+                    </div>
+                    <div className="d-flex align-items-center justify-content-end me-1" style={{ flex: 1, paddingRight: "10px" }}>
+                        <ImageHandler
+                            size={52}
+                            imageUrl={profileImageURL}
+                            onClick={() => navigate(`/account/${currentUser.uid}`)}
+                            backColor={"white"}
+                        />
                     </div>
                 </Navbar>
                 :

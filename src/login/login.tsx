@@ -8,6 +8,7 @@ import './login.css'
 import { FaComments, FaTrophy, FaUsers } from "react-icons/fa";
 import ScreenResize from "../utils/screen_resize";
 import { useAuth } from "../AuthContext";
+import { FormStyle } from "../utils/utility";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -148,11 +149,12 @@ const Login = () => {
                                     {alert && <Alert className="mt-2 mb-5" variant='danger' onClose={() => setAlert(false)} dismissible>Credenziali errate, riprova.</Alert>}
                                     {resetAlert && <Alert variant='info' onClose={() => setResetAlert('')} dismissible>{resetAlert}</Alert>}
                                     <Form.Group id="formBasicEmail">
-                                        <Form.Label>Email o Username</Form.Label>
+                                        <Form.Label>Email</Form.Label>
                                         <Form.Control
                                             type="text"
                                             placeholder="Inserisci email"
                                             value={email}
+                                            style={FormStyle}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
                                         />
@@ -167,6 +169,7 @@ const Login = () => {
                                             type="password"
                                             placeholder="Password"
                                             value={password}
+                                            style={FormStyle}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                         />

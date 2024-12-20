@@ -50,7 +50,7 @@ function PlayerAccount() {
                 <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
                     <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
                         <Col className="py-0 my-2 d-flex flex-column" sm={isScreenSmall ? 12 : 4} style={{borderRight: isScreenSmall ? "" : "2px solid #EFEEEE"}}>
-                            <Container fluid className="justify-content-center mt-4">
+                            <Container fluid className="d-flex justify-content-center mt-4">
                                 <ImageHandler size={160} imageUrl={profileImageURL} backColor={"#2f7157"}/>
                             </Container>
                             <h1 className="my-font mt-3">{user.name} {user.surname}</h1>

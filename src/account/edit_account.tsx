@@ -11,6 +11,7 @@ import { db, storage } from "../firebaseConfig";
 import { uploadImage } from "../utils/image_handler";
 import {deleteObject, ref } from "firebase/storage";
 import '../App.css';
+import { FormStyle } from "../utils/utility";
 
 function EditAccount() {
     const navigate = useNavigate();
@@ -332,6 +333,7 @@ function EditAccount() {
                                 <Form.Control
                                     type="text"
                                     value={name}
+                                    style={FormStyle}
                                     onChange={(e) => setName(e.target.value)}
                                     isInvalid={!!formErrors.name}
                                 />
@@ -346,6 +348,7 @@ function EditAccount() {
                                 <Form.Control
                                     type="text"
                                     value={surname}
+                                    style={FormStyle}
                                     onChange={(e) => setSurname(e.target.value)}
                                     isInvalid={!!formErrors.surname}
                                 />
@@ -362,6 +365,7 @@ function EditAccount() {
                                 <Form.Control
                                     type="email"
                                     value={email}
+                                    style={FormStyle}
                                     onChange={(e) => setEmail(e.target.value)}
                                     isInvalid={!!formErrors.email}
                                 />
@@ -376,6 +380,7 @@ function EditAccount() {
                                 <Form.Control
                                     type="text"
                                     value={phone}
+                                    style={FormStyle}
                                     onChange={(e) => setPhone(e.target.value)}
                                     isInvalid={!!formErrors.phone}
                                 />
@@ -391,6 +396,7 @@ function EditAccount() {
                                 <Form.Label>Lato diritto</Form.Label>
                                 <Form.Select
                                     value={forehand}
+                                    style={FormStyle}
                                     onChange={(e) => setForehand(e.target.value)}
                                     isInvalid={!!formErrors.forehand}
                                 >
@@ -408,6 +414,7 @@ function EditAccount() {
                                 <Form.Label>Colpo preferito</Form.Label>
                                 <Form.Select
                                     value={bestShot}
+                                    style={FormStyle}
                                     onChange={(e) => setBestShot(e.target.value)}
                                     isInvalid={!!formErrors.bestShot}
                                 >

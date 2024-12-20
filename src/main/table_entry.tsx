@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from "@mui/material";
+import {Container, TableCell, TableRow } from "@mui/material";
 import { Player } from "../utils/types";
 import { useEffect, useState } from "react";
 import { fetchProfileImage } from "../utils/get_data";
@@ -92,7 +92,7 @@ const TableEntry: React.FC<TableEntryProps> = ({ player, isScreenSmall }) => {
                 }}
             >
                 <div style={{ display: "inline-block", verticalAlign: "middle", width: "45px", marginRight: "10px" }}>
-                    <ImageHandler size={45} imageUrl={profileImageURL}/>
+                    <ImageHandler size={45} imageUrl={profileImageURL} backColor={"#2f7157"}/>
                 </div>
                 <div style={{ display: "inline-block", verticalAlign: "middle", wordBreak: "break-word" }}>
                     {player.name}

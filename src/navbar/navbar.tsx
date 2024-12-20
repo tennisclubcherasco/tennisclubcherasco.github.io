@@ -1,9 +1,8 @@
 import {getDownloadURL, ref } from "firebase/storage";
 import {useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
-import { Navbar, NavbarBrand } from "react-bootstrap";
+import {Container, Navbar, NavbarBrand } from "react-bootstrap";
 import {auth, storage } from "../firebaseConfig";
-import { FaUserCircle } from "react-icons/fa";
 import { GrMenu } from "react-icons/gr";
 import { useAuth } from "../AuthContext";
 import MenuOffCanvas from "./menu_offcanvas";
@@ -72,7 +71,7 @@ function MyNavbar() {
                         onClick={() => navigate("/main")}
                     />
                     <div className="me-3 d-flex align-items-center">
-                        <ImageHandler size={55} imageUrl={profileImageURL}/>
+                        <ImageHandler size={55} imageUrl={profileImageURL} onClick={() => navigate(`/account/${currentUser.uid}`)} backColor={"white"}/>
                     </div>
                 </Navbar>
                 :
@@ -91,8 +90,8 @@ function MyNavbar() {
                         </h1>
                     </NavbarBrand>
                     <div className="me-4 d-flex align-items-center">
-                        <ImageHandler size={55} imageUrl={profileImageURL}/>
-                        <GrMenu className="ms-5" style={{width: '45px', height: 'auto', color: 'white', cursor: 'pointer'}}
+                        <ImageHandler size={55} imageUrl={profileImageURL} onClick={() => navigate(`/account/${currentUser.uid}`)} backColor={"white"}/>
+                        <GrMenu className="ms-4" style={{width: '45px', height: 'auto', color: 'white', cursor: 'pointer'}}
                                     onClick={() => setShowMenu(true)}/>
                     </div>
                 </Navbar>

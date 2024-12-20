@@ -16,7 +16,7 @@ function Main() {
             <MyNavbar/>
             <Container fluid className="p-0 d-flex" style={{height: '100vh'}}>
                 <Row className="flex-grow-1 p-0 m-0" style={{height:"100%"}}>
-                    <Col className="py-0 my-5 d-flex flex-column" sm={noLastMatches ? 12 : 9} style={{borderRight: noLastMatches ? "" : "2px solid #EFEEEE"}}>
+                    <Col className="py-0 my-5 d-flex flex-column" sm={noLastMatches ? 12 : 9} style={{borderRight: noLastMatches ? "" : "2px solid #2f7157"}}>
                         <h2 className="my-font mb-3">Players Ranking</h2>
                         <Ranking isScreenSmall={isScreenSmall}/>
                     </Col>

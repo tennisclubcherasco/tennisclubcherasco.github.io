@@ -19,7 +19,7 @@ type Match = {
     player2ID: string;
     score: string;
     date: string;
-}
+};
 
 type Score = {
     setNumber: number;

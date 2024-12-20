@@ -1,15 +1,29 @@
 import {collection, doc, getDoc, getDocs, query } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
 import {getDownloadURL, ref } from "firebase/storage";
-import { Player } from "./types";
+import {Match, Player } from "./types";
 
-async function getUser(userId: string) {
+// USERS
+async function getUser(userId: string): Promise<Player | null> {
     try {
         const userDocRef = doc(db, "users", userId);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
-            return userDoc.data();
+            return {
+                uid: userDoc.data().uid,
+                name: userDoc.data().name,
+                surname: userDoc.data().surname,
+                birthDate: userDoc.data().birthDate,
+                email: userDoc.data().email,
+                phone: userDoc.data().phone,
+                ranking: userDoc.data().ranking,
+                bestRanking: userDoc.data().bestRanking,
+                score: userDoc.data().score,
+                forehand: userDoc.data().forehand,
+                bestShot: userDoc.data().bestShot,
+                profileImage: userDoc.data().profileImage,
+            };
         } else {
             console.log("No such document!");
             return null;
@@ -47,6 +61,32 @@ async function getAllUsers() {
     }
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// MATCHES
+async function getLastNMatches(n: number) {
+    try {
+        const matchesCollectionRef = collection(db, "matches");
+        const querySnapshot = await getDocs(matchesCollectionRef);
+
+        const matches: Match[] = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            player1ID: doc.data().player1ID,
+            player2ID: doc.data().player2ID,
+            score: doc.data().score,
+            date: doc.data().date,
+        }));
+
+        return matches.sort((m1, m2) => m1.date > m2.date ? 1 : -1).slice(0, n);
+    } catch (error) {
+        console.error("Error fetching matches:", error);
+        return [];
+    }
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// IMAGES
 const downloadImageFromStorage = async (imageUrl: string): Promise<string | null> => {
     try {
         const storageRef = ref(storage, imageUrl); // Usa l'URL salvato in Firestore come riferimento nel Firebase Storage
@@ -69,4 +109,4 @@ const fetchProfileImage = async (profileImagePath: string) => {
     }
 }
 
-export { getUser, getAllUsers, downloadImageFromStorage, fetchProfileImage };
+export { getUser, getAllUsers, getLastNMatches, downloadImageFromStorage, fetchProfileImage };

@@ -15,9 +15,10 @@ const NewMatch = () => {
     const navigate = useNavigate();
     const {currentUser} = useAuth();
     const [showModal, setShowModal] = useState<boolean>(false);
-    const isScreenSmall = ScreenResize(900)
-    const smallForm = ScreenResize(1200)
-    const cardMargin = ScreenResize(1300)
+    const isScreenSmall = ScreenResize(900);
+    const smallForm = ScreenResize(1200);
+    const cardMargin = ScreenResize(1300);
+    const modalSize = ScreenResize(400);
 
     const [allPlayers, setAllPlayers] = useState<Player[]>([]);
     const [player1, setPlayer1] = useState<any>(null);
@@ -151,38 +152,49 @@ const NewMatch = () => {
                         </h4>
                     </Modal.Header>
                     <Modal.Body>
-                        <Row>
-                            <Col xs={7}>
+                        <Row className="d-flex align-items-center">
+                            <Col className={modalSize ? "ms-0" : "ms-4"} xs={6}>
                                 <h5 className="my-font">
                                     {player1.name + " " + player1.surname}
                                 </h5>
                             </Col>
                             <Col xs={5}>
-                                {score.map((set) => {
-                                    const win = set.player1 > set.player2
-                                    return (
-                                        <h5 style={{fontWeight: win ? "bold" : "", color: win ? "#2f7157" : "black"}}>
-                                            {set.player1}
-                                        </h5>
-                                    )
-                                })}
+                                <Row>
+                                    {score.map((set) => {
+                                        const win = set.player1 > set.player2
+                                        return (
+                                            <Col xs={2}>
+                                                <h5 style={{fontWeight: win ? "bold" : "", color: win ? "#2f7157" : "black"}}>
+                                                    {set.player1}
+                                                </h5>
+                                            </Col>
+                                        )
+                                    })}
+                                </Row>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs={7}>
+                        <Col xs={12}>
+                            <div className={isScreenSmall ? "my-2 mx-1" : "my-2 mx-2"} style={{height: "2px", backgroundColor: "#2f7157"}}></div>
+                        </Col>
+                        <Row className="d-flex align-items-center">
+                            <Col className={modalSize ? "ms-0" : "ms-4"} xs={6}>
                                 <h5 className="my-font">
                                     {player2.name + " " + player2.surname}
                                 </h5>
                             </Col>
                             <Col xs={5}>
-                                {score.map((set) => {
-                                    const win = set.player1 < set.player2
-                                    return (
-                                        <h5 style={{fontWeight: win ? "bold" : "", color: win ? "#2f7157" : "black"}}>
-                                            {set.player2}
-                                        </h5>
-                                    )
-                                })}
+                                <Row>
+                                    {score.map((set) => {
+                                        const win = set.player1 < set.player2
+                                        return (
+                                            <Col xs={2}>
+                                                <h5 style={{fontWeight: win ? "bold" : "", color: win ? "#2f7157" : "black"}}>
+                                                    {set.player2}
+                                                </h5>
+                                            </Col>
+                                        )
+                                    })}
+                                </Row>
                             </Col>
                         </Row>
                     </Modal.Body>
@@ -267,7 +279,7 @@ const NewMatch = () => {
                 </Col>
             </Row>
             <Row className="d-flex justify-content-center mt-5 mx-0">
-                <Col className="ms-0 p-0" xs={isScreenSmall ? 4 : 3}>
+                <Col className="ms-0 p-0" xs={isScreenSmall ? 5 : 3}>
                     <Card className={cardMargin ? "h-100 mx-0" : "h-100 mx-5"} style={{
                         borderRadius:"40px",
                         color:"#2f7157",
@@ -276,23 +288,23 @@ const NewMatch = () => {
                         borderWidth:"5px",
                         borderColor:"#24644c"
                     }}>
-                        <Card.Body>
-                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL1}/>
+                        <Card.Body className="px-1">
+                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL1} backColor={"#2f7157"}/>
                             <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
                                 {player1?.name} {player1?.surname}
                             </p>
                             <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
-                                Ranked: 12
+                                {player1 && "Ranked: "} {player1 && player1.ranking}
                             </p>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col className="d-flex justify-content-center align-items-center mx-3" xs={1}>
-                    <h1 className="my-font">
+                <Col className="d-flex justify-content-center align-items-center mx-1" xs={1}>
+                    <h2 className="my-font">
                         VS
-                    </h1>
+                    </h2>
                 </Col>
-                <Col className="me-0 p-0" xs={isScreenSmall ? 4 : 3}>
+                <Col className="me-0 p-0" xs={isScreenSmall ? 5 : 3}>
                     <Card className={cardMargin ? "h-100 mx-0" : "h-100 mx-5"} style={{
                         borderRadius:"40px",
                         color:"#2f7157",
@@ -301,8 +313,8 @@ const NewMatch = () => {
                         borderWidth:"5px",
                         borderColor:"#24644c"
                     }}>
-                        <Card.Body>
-                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL2}/>
+                        <Card.Body className="px-1">
+                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL2} backColor={"#2f7157"}/>
                             <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
                                 {player2 ? player2.name + " " + player2.surname : "Seleziona avversario"}
                             </p>

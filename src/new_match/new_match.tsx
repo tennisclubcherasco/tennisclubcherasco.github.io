@@ -1,7 +1,7 @@
 import {Button, Card, Col, Container, Form, Modal, Row } from "react-bootstrap"
 import MyNavbar from "../navbar/navbar"
 import { useAuth } from "../AuthContext";
-import {useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { fetchProfileImage, getAllUsers, getUser } from "../utils/get_data";
 import { ImageHandler } from "../utils/image_handler";
 import ScreenResize from "../utils/screen_resize";
@@ -9,7 +9,8 @@ import { Player, Score } from "../utils/types";
 import MatchScore from "./match_score";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
-import {addDoc, collection } from "firebase/firestore";
+import {addDoc, collection, doc, updateDoc} from "firebase/firestore";
+import {calcPlayerScore, getWinner} from "../utils/score_ranking";
 
 const NewMatch = () => {
     const navigate = useNavigate();
@@ -19,6 +20,8 @@ const NewMatch = () => {
     const smallForm = ScreenResize(1200);
     const cardMargin = ScreenResize(1300);
     const modalSize = ScreenResize(400);
+    const [updating, setUpdating] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
 
     const [allPlayers, setAllPlayers] = useState<Player[]>([]);
     const [player1, setPlayer1] = useState<any>(null);
@@ -57,7 +60,7 @@ const NewMatch = () => {
                     setPlayer1(userData);
 
                     if (userData?.profileImage) {
-                        loadProfileImage(userData.profileImage);
+                        await loadProfileImage(userData.profileImage);
                     }
                 } catch (error) {
                     console.error("Error fetching user data:", error);
@@ -88,7 +91,7 @@ const NewMatch = () => {
         };
         let formValid = true
 
-        if (date == "") {
+        if (date === "") {
             formErrors.date = "Inserisci una data";
             formValid = false;
         }
@@ -104,7 +107,7 @@ const NewMatch = () => {
         }
 
         for (let i = 0; i < score.length; i++) {
-            if (score[i].player1 == 0 && score[i].player2 == 0) {
+            if (score[i].player1 === 0 && score[i].player2 === 0) {
                 setShowAlert(true);
                 formValid = false;
             }
@@ -118,20 +121,40 @@ const NewMatch = () => {
     }
 
     const createNewMatch = async () => {
+        setShowModal(false);
+        setUpdating(true);
+        setShowLoading(true);
+
         const scoreString = score.map((set) => set.player1 + "-" + set.player2).join(" ");
+        const winner = getWinner(scoreString);
+        const playerMatchScores = calcPlayerScore(player1, player2, winner);
+
         const newMatch = {
             player1ID: currentUser.uid,
             player2ID: player2.uid,
             score: scoreString,
             date: date,
+            p1Score: playerMatchScores.p1matchScore,
+            p2Score: playerMatchScores.p2matchScore
         }
 
         try {
+            const p1Ref = doc(db, "users", player1.uid);
+            const p2Ref = doc(db, "users", player2.uid);
+
+            const p1UpdatedScore = {score: player1.score + playerMatchScores.p1matchScore}
+            const p2UpdatedScore = {score: player2.score + playerMatchScores.p2matchScore}
+
             await addDoc(collection(db, "matches"), newMatch);
             console.log("Match added successfully");
-            navigate(`/main`);
+            await updateDoc(p1Ref, p1UpdatedScore);
+            await updateDoc(p2Ref, p2UpdatedScore);
+            console.log("Players' scores updated successfully");
+            setUpdating(false);
         } catch (e) {
             console.error("Error adding match: ", e);
+            setUpdating(false);
+            setShowLoading(false);
         }
     }
 
@@ -144,6 +167,25 @@ const NewMatch = () => {
             <h6 className="my-font mt-2">
                 Seleziona la data della partita ed il tuo avversario poi inserisci il risultato e conferma. In caso di partita terminata con un tie break al posto di un eventuale terzo set viene considerato un pareggio.
             </h6>
+            <Modal show={showLoading} centered className="my-modal">
+                <Modal.Body>
+                    <h5 className="my-font">
+                        {updating ? "Aggiungendo i punteggi..." : "Punteggi aggiornati con successo!"}
+                    </h5>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button disabled={updating} className="my-button" variant="primary"
+                            style={{
+                                width: isScreenSmall ? '50%' : '20%',
+                                minHeight: '40px',
+                            }}
+                            onClick={() => navigate(`/main`)}>
+                        <h6 className="my-font" style={{ pointerEvents: "none" }}>
+                            chiudi
+                        </h6>
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             {showModal &&
                 <Modal show={showModal} centered className="">
                     <Modal.Header>
@@ -263,7 +305,7 @@ const NewMatch = () => {
                         >
                             <option>Seleziona avversario...</option>
                             {allPlayers
-                                .filter((player) => player.uid != currentUser.uid)
+                                .filter((player) => player.uid !== currentUser.uid)
                                 .sort((p1, p2) => {
                                     if (p1.surname > p2.surname) return 1;
                                     if (p1.surname < p2.surname) return -1;

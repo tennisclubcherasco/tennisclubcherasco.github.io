@@ -12,7 +12,7 @@ import AccountIcon from "../utils/account_icon";
 import ScreenResize from "../utils/screen_resize";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { uploadImage } from "../utils/image_handler";
+import {handleFileChange, uploadImage} from "../utils/image_handler";
 import { FormStyle } from "../utils/utility";
 
 const Register = () => {
@@ -76,23 +76,6 @@ const Register = () => {
                 console.error('Errore durante il recupero dell\'immagine:', error);
             });
     }, []);
-
-    const handleSelectImage = () => {
-        fileInputRef.current?.click();
-    };
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const selectedFile = event.target.files[0];
-            setImage(selectedFile);
-
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(selectedFile);
-        }
-    };
 
     const checkValidity = () : Boolean => {
         let formErrors = {
@@ -339,7 +322,7 @@ const Register = () => {
                                         accept="image/*"
                                         ref={fileInputRef}
                                         style={{ display: "none" }}
-                                        onChange={handleFileChange}
+                                        onChange={(event) => handleFileChange(event, setImage, setImagePreview)}
                                     />
                                     <Button className="mt-4" variant="primary"
                                             style={{
@@ -353,7 +336,7 @@ const Register = () => {
                                             onMouseOut={() => setImgButtonHover(false)}
                                             onTouchStart={() => setImgButtonHover(true)}
                                             onTouchEnd={() => setImgButtonHover(false)}
-                                            onClick={() => handleSelectImage()}>
+                                            onClick={() => fileInputRef.current?.click()}>
                                         <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                             Seleziona immagine
                                         </h4>

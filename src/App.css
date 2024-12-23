@@ -17,6 +17,13 @@
     border-color: white !important;
 }
 
+.my-button.btn-primary:disabled {
+    background: #53987b;
+    border-color: #2f7157;
+    border-width: 3px;
+    border-radius: 20px;
+}
+
 .my-button-outlined.btn-primary {
     color: #2f7157;
     background: white;

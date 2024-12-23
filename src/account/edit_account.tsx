@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../AuthContext";
 import {downloadImageFromStorage, fetchProfileImage, getUser } from "../utils/get_data";
 import {Alert, Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
@@ -8,7 +8,7 @@ import AccountIcon from "../utils/account_icon";
 import {useNavigate, useParams } from "react-router-dom";
 import { doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
-import { uploadImage } from "../utils/image_handler";
+import {handleFileChange, uploadImage} from "../utils/image_handler";
 import {deleteObject, ref } from "firebase/storage";
 import '../App.css';
 import { FormStyle } from "../utils/utility";
@@ -91,7 +91,7 @@ function EditAccount() {
         };
         let formValid = true;
 
-        if (name != user.name) {
+        if (name !== user.name) {
             if (!name) {
                 formErrors.name = "Il nome è obbligatorio.";
                 formValid = false;
@@ -100,7 +100,7 @@ function EditAccount() {
             }
         }
 
-        if (surname != user.surname) {
+        if (surname !== user.surname) {
             if (!surname) {
                 formErrors.surname = "Il cognome è obbligatorio.";
                 formValid = false;
@@ -109,7 +109,7 @@ function EditAccount() {
             }
         }
 
-        if (email != user.email) {
+        if (email !== user.email) {
             if (!email || !/\S+@\S+\.\S+/.test(email)) {
                 formErrors.email = "Inserisci un'email valida.";
                 formValid = false;
@@ -118,7 +118,7 @@ function EditAccount() {
             }
         }
 
-        if (phone != user.phone) {
+        if (phone !== user.phone) {
             if (!phone || !/^\d{10}$/.test(phone)) {
                 formErrors.phone = "Inserisci un numero di telefono valido.";
                 formValid = false;
@@ -127,7 +127,7 @@ function EditAccount() {
             }
         }
 
-        if (forehand != user.forehand) {
+        if (forehand !== user.forehand) {
             if (!forehand) {
                 formErrors.forehand = "Seleziona il lato del diritto.";
                 formValid = false;
@@ -136,7 +136,7 @@ function EditAccount() {
             }
         }
 
-        if(bestShot != user.bestShot) {
+        if(bestShot !== user.bestShot) {
             if (!bestShot) {
                 formErrors.bestShot = "Seleziona il colpo preferito.";
                 formValid = false;
@@ -166,47 +166,33 @@ function EditAccount() {
         }
 
         try {
+            setUpdating(true);
+            setShowModal(true);
+
             const docRef = doc(db, "users", currentUser.uid);
 
-            if ((imagePreview || imagePreview=="") && profileImageURL) {
+            if ((imagePreview || imagePreview === "") && profileImageURL) {
                 const imageRef = ref(storage, profileImageURL)
                 await deleteObject(imageRef)
                 console.log("image deleted")
                 updatedData.profileImage = await uploadImage(image, currentUser.uid);
-            } else if (imagePreview != "" && !profileImageURL) {
+            } else if (imagePreview !== "" && !profileImageURL) {
                 updatedData.profileImage = await uploadImage(image, currentUser.uid);
             }
 
-            setUpdating(true);
-            setShowModal(true);
             await updateDoc(docRef, updatedData)
             setUpdating(false);
 
             console.log("Document successfully updated!");
         } catch (err) {
             console.error("Error getting document: ", err);
+            setUpdating(false);
+            setShowModal(false);
         }
     }
 
-    const handleSelectImage = () => {
-        fileInputRef.current?.click();
-    };
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const selectedFile = event.target.files[0];
-            setImage(selectedFile);
-
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(selectedFile);
-        }
-    };
-
     const HandleImage = () => {
-        if (imagePreview != null && imagePreview != "") return (
+        if (imagePreview != null && imagePreview !== "") return (
             <Container className="p-0"
                        style={{
                            width: "150px",
@@ -226,7 +212,7 @@ function EditAccount() {
                 />
             </Container>
         )
-        else if (imagePreview == "" || profileImageURL == "") return (
+        else if (imagePreview === "" || profileImageURL === "") return (
             <AccountIcon size={150}/>
         )
         else if (profileImageURL) return (
@@ -285,14 +271,14 @@ function EditAccount() {
                             accept="image/*"
                             ref={fileInputRef}
                             style={{ display: "none" }}
-                            onChange={handleFileChange}
+                            onChange={(event) => handleFileChange(event, setImage, setImagePreview)}
                         />
                         <Button className="my-button mt-4" variant="primary"
                                 style={{
                                     width: isScreenSmall ? '50%' : '20%',
                                     minHeight: '40px',
                                 }}
-                                onClick={() => handleSelectImage()}>
+                                onClick={() => fileInputRef.current?.click()}>
                             <h4 className="my-font" style={{ pointerEvents: "none" }}>
                                 Cambia immagine
                             </h4>

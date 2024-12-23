@@ -1,7 +1,8 @@
-import {getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import {db, storage } from "../firebaseConfig";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "../firebaseConfig";
 import AccountIcon from "./account_icon";
-import { Container } from "react-bootstrap";
+import {Container} from "react-bootstrap";
+import React from "react";
 
 const uploadImage = async (
     image: File | null,
@@ -19,9 +20,7 @@ const uploadImage = async (
 
     try {
         await uploadBytes(storageRef, image);
-        const downloadURL = await getDownloadURL(storageRef);
-
-        return downloadURL;
+        return await getDownloadURL(storageRef);
     } catch (error) {
         console.error("Errore durante il caricamento:", error);
         throw new Error("C'è stato un errore durante il caricamento.");
@@ -73,4 +72,21 @@ const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, im
     }
 }
 
-export { uploadImage, ImageHandler };
+const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setImage: React.Dispatch<React.SetStateAction<File | null>>,
+    setImagePreview: React.Dispatch<React.SetStateAction<string | null>>
+) => {
+    if (event.target.files && event.target.files[0]) {
+        const selectedFile = event.target.files[0];
+        setImage(selectedFile);
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+};
+
+export { uploadImage, ImageHandler, handleFileChange };

@@ -27,4 +27,20 @@ type Score = {
     player2: number;
 }[];
 
-export type { Player, Match, Score };
+type H2H = {
+    id: string;
+    player1: string;
+    player2: string;
+    winsP1: number;
+    winsP2: number;
+    ties: number;
+}
+
+type PlayerStats = {
+    matches: number;
+    win: number;
+    lose: number;
+    ties: number;
+}
+
+export type { Player, Match, Score, H2H, PlayerStats };

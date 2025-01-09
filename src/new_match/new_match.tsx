@@ -10,7 +10,8 @@ import MatchScore from "./match_score";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import {addDoc, collection, doc, updateDoc} from "firebase/firestore";
-import {calcPlayerScore, getWinner} from "../utils/score_ranking";
+import {calcPlayerScore, getWinner, UpdateRanking} from "../utils/score_ranking";
+import {newMatch} from "../utils/set_data";
 
 const NewMatch = () => {
     const navigate = useNavigate();
@@ -125,31 +126,8 @@ const NewMatch = () => {
         setUpdating(true);
         setShowLoading(true);
 
-        const scoreString = score.map((set) => set.player1 + "-" + set.player2).join(" ");
-        const winner = getWinner(scoreString);
-        const playerMatchScores = calcPlayerScore(player1, player2, winner);
-
-        const newMatch = {
-            player1ID: currentUser.uid,
-            player2ID: player2.uid,
-            score: scoreString,
-            date: date,
-            p1Score: playerMatchScores.p1matchScore,
-            p2Score: playerMatchScores.p2matchScore
-        }
-
         try {
-            const p1Ref = doc(db, "users", player1.uid);
-            const p2Ref = doc(db, "users", player2.uid);
-
-            const p1UpdatedScore = {score: player1.score + playerMatchScores.p1matchScore}
-            const p2UpdatedScore = {score: player2.score + playerMatchScores.p2matchScore}
-
-            await addDoc(collection(db, "matches"), newMatch);
-            console.log("Match added successfully");
-            await updateDoc(p1Ref, p1UpdatedScore);
-            await updateDoc(p2Ref, p2UpdatedScore);
-            console.log("Players' scores updated successfully");
+            newMatch(player1, player2, score, date);
             setUpdating(false);
         } catch (e) {
             console.error("Error adding match: ", e);

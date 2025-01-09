@@ -5,7 +5,7 @@ import { storage, auth, db } from "../firebaseConfig";
 import { FaTrophy, FaUsers, FaComments, FaUserCircle } from 'react-icons/fa'
 import '../App.css'
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import {doc, setDoc } from "firebase/firestore";
+import {collection, doc, setDoc} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import AccountIcon from "../utils/account_icon";
@@ -14,6 +14,7 @@ import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import {handleFileChange, uploadImage} from "../utils/image_handler";
 import { FormStyle } from "../utils/utility";
+import {UpdateRanking} from "../utils/score_ranking";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -182,11 +183,20 @@ const Register = () => {
                 forehand: forehand,
                 bestShot: bestShot,
                 profileImage: profileImage,
+                score: 1000,
+                bestRanking: null
+            });
+
+            const statsRef = doc(collection(doc(db, "users", user.uid), "stats"));
+            await setDoc(statsRef, {
+                matches: 0,
+                win: 0,
+                lose: 0
             });
 
             console.log("User registered successfully");
-            navigate('/main')
-
+            await UpdateRanking();
+            navigate('/main');
         } catch (err) {
             console.error(err);
             if (err instanceof FirebaseError) {

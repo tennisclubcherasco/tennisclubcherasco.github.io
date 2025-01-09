@@ -30,7 +30,22 @@ const uploadImage = async (
 const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, imageUrl: string | null, onClick?: () => void, backColor: string }) => {
     if(imageUrl === null || imageUrl === "") {
         return (
-            <AccountIcon size={size}/>
+            <Container className="p-0 m-0"
+                       style={{
+                           width: (size+6) + "px", // Larghezza del cerchio
+                           height: (size+6) + "px", // Altezza del cerchio (uguale alla larghezza)
+                           borderRadius: "50%", // Trasforma il container in un cerchio
+                           backgroundColor: "#2f7157", // Colore di sfondo
+                           display: "flex", // Centrare contenuti all'interno
+                           alignItems: "center", // Centrare verticalmente
+                           justifyContent: "center", // Centrare orizzontalmente
+                           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Aggiungi un'ombra opzionale
+                           cursor: onClick ? "pointer" : "default",
+                       }}
+                       onClick={onClick}
+            >
+                <AccountIcon size={size+6}/>
+            </Container>
         )
     } else {
         return (

@@ -1,7 +1,7 @@
-import {collection, doc, getDoc, getDocs, query } from "firebase/firestore";
-import { db, storage } from "../firebaseConfig";
-import {getDownloadURL, ref } from "firebase/storage";
-import {Match, Player } from "./types";
+import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {db, storage} from "../firebaseConfig";
+import {getDownloadURL, ref} from "firebase/storage";
+import {Match, Player, PlayerStats} from "./types";
 
 // USERS
 async function getUser(userId: string): Promise<Player | null> {
@@ -23,6 +23,28 @@ async function getUser(userId: string): Promise<Player | null> {
                 forehand: userDoc.data().forehand,
                 bestShot: userDoc.data().bestShot,
                 profileImage: userDoc.data().profileImage,
+            };
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting document:", error);
+        return null;
+    }
+}
+
+async function getStats(userId: string): Promise<PlayerStats | null> {
+    try {
+        const statsDocRef = doc(db, "users", userId, "stats", "playerStats");
+        const statsDoc = await getDoc(statsDocRef);
+
+        if (statsDoc.exists()) {
+            return {
+                matches: statsDoc.data().matches,
+                win: statsDoc.data().win,
+                lose: statsDoc.data().lose,
+                ties: statsDoc.data().ties
             };
         } else {
             console.log("No such document!");
@@ -90,8 +112,7 @@ async function getLastNMatches(n: number) {
 const downloadImageFromStorage = async (imageUrl: string): Promise<string | null> => {
     try {
         const storageRef = ref(storage, imageUrl); // Usa l'URL salvato in Firestore come riferimento nel Firebase Storage
-        const downloadURL = await getDownloadURL(storageRef); // Ottieni l'URL di download
-        return downloadURL;
+        return await getDownloadURL(storageRef);
     } catch (error) {
         console.error("Error downloading image from Firebase Storage: ", error);
         return null;
@@ -101,12 +122,11 @@ const downloadImageFromStorage = async (imageUrl: string): Promise<string | null
 const fetchProfileImage = async (profileImagePath: string) => {
     if (profileImagePath) {
         try {
-            const downloadURL = await downloadImageFromStorage(profileImagePath);
-            return downloadURL;
+            return await downloadImageFromStorage(profileImagePath);
         } catch (error) {
             console.error("Error fetching profile image:", error);
         }
     }
 }
 
-export { getUser, getAllUsers, getLastNMatches, downloadImageFromStorage, fetchProfileImage };
+export { getUser, getStats, getAllUsers, getLastNMatches, downloadImageFromStorage, fetchProfileImage };

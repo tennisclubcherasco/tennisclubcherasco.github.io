@@ -1,4 +1,7 @@
-import { Player } from "./types";
+import {Player} from "./types";
+import {getAllUsers} from "./get_data";
+import {collection, doc, getDocs, query, where, writeBatch} from "firebase/firestore";
+import {db} from "../firebaseConfig";
 
 function getWinner(scoreString: string){
     const sets = scoreString.split(" ");
@@ -34,4 +37,77 @@ function calcPlayerScore(player1: Player, player2: Player, winner: number) {
     };
 }
 
-export { getWinner, calcPlayerScore };
+async function switchPlayers(player1: Player, player2: Player) {
+    const q = query(
+        collection(db, "H2H"),
+        where("player1", "in", [player1.uid, player2.uid]),
+        where("player2", "in", [player1.uid, player2.uid])
+    );
+
+    const querySnapshot = await getDocs(q).then();
+
+    if (!querySnapshot.empty) {
+        for (const doc of querySnapshot.docs) {
+            const data = doc.data();
+            console.log("Scontro diretto trovato", data);
+
+            if (data.winsP1 === data.winsP2) {
+                return false;
+            } else if (player1.uid === data.player1 && data.winsP1 > data.winsP2) {
+                return false;
+            } else if (player1.uid === data.player2 && data.winsP2 > data.winsP1) {
+                return false;
+            }
+        }
+    } else {
+        return false
+    }
+
+    return true;
+}
+
+const UpdateRanking = async () => {
+    let allPlayers: Player[] = await getAllUsers();
+    const batch = writeBatch(db);
+
+    allPlayers.sort((a, b) => b.score - a.score);
+
+    const switchPromises = [];
+    for (let index = 0; index < allPlayers.length - 1; index++) {
+        if (allPlayers[index].score === allPlayers[index + 1].score) {
+            switchPromises.push(
+                switchPlayers(allPlayers[index], allPlayers[index + 1]).then(switchNeeded => {
+                    if (switchNeeded) {
+                        const temp = allPlayers[index];
+                        allPlayers[index] = allPlayers[index + 1];
+                        allPlayers[index + 1] = temp;
+                    }
+                })
+            );
+        }
+    }
+
+    await Promise.all(switchPromises);
+
+    for (let index = 0; index < allPlayers.length; index++) {
+        const player = allPlayers[index];
+        const newRank = index + 1;
+
+        if (player.ranking !== newRank) {
+            const playerRef = doc(db, "users", player.uid);
+            batch.update(playerRef, {ranking: newRank})
+            if (newRank < player.bestRanking || player.bestRanking == null) {
+                batch.update(playerRef, {bestRanking: newRank})
+            }
+        }
+    }
+
+    try {
+        await batch.commit();
+        console.log("Ranking aggiornato con successo!");
+    } catch (e) {
+        console.error("Errore durante l'aggiornamento del ranking: ", e);
+    }
+}
+
+export { getWinner, calcPlayerScore, UpdateRanking };

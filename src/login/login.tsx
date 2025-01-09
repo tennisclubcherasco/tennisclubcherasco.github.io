@@ -9,6 +9,7 @@ import { FaComments, FaTrophy, FaUsers } from "react-icons/fa";
 import ScreenResize from "../utils/screen_resize";
 import { useAuth } from "../AuthContext";
 import { FormStyle } from "../utils/utility";
+import SpecialButton from "./special_button";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -201,6 +202,11 @@ const Login = () => {
                                             Registrati
                                         </h5>
                                     </Button>
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center mx-5 mt-3 mb-4">
+                                <Col sm={8} className="d-flex justify-content-center">
+                                    <SpecialButton/>
                                 </Col>
                             </Row>
                             <Row className="justify-content-center mx-5 mt-5">

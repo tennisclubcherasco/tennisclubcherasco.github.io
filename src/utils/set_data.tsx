@@ -24,13 +24,13 @@ async function updateStats(uid: string, uid2: string, winnerId: string | null) {
     if (P1stats != null && P2stats != null){
         if (winnerId === uid) {
             await updateDoc(p1StatsRef, {matches: P1stats.matches + 1, win: P1stats.win + 1});
-            await updateDoc(p2StatsRef, {matches: P2stats.matches + 1, win: P2stats.lose + 1});
+            await updateDoc(p2StatsRef, {matches: P2stats.matches + 1, lose: P2stats.lose + 1});
         } else if (winnerId === uid2) {
-            await updateDoc(p1StatsRef, {matches: P1stats.matches + 1, win: P1stats.lose + 1});
+            await updateDoc(p1StatsRef, {matches: P1stats.matches + 1, lose: P1stats.lose + 1});
             await updateDoc(p2StatsRef, {matches: P2stats.matches + 1, win: P2stats.win + 1});
         } else {
-            await updateDoc(p1StatsRef, {matches: P1stats.matches + 1, win: P1stats.ties + 1});
-            await updateDoc(p2StatsRef, {matches: P2stats.matches + 1, win: P2stats.ties + 1});
+            await updateDoc(p1StatsRef, {matches: P1stats.matches + 1, ties: P1stats.ties + 1});
+            await updateDoc(p2StatsRef, {matches: P2stats.matches + 1, ties: P2stats.ties + 1});
         }
     }
 }

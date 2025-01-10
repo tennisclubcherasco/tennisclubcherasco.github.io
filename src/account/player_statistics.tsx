@@ -6,7 +6,7 @@ import {
     Chart as ChartJS,
     ArcElement,
     Tooltip,
-    Legend,
+    Legend, Chart,
 } from "chart.js";
 import ScreenResize from "../utils/screen_resize";
 
@@ -21,6 +21,32 @@ const PlayerStatistics: React.FC<PlayerStatsProps> = ({ player, stats }) => {
 
     ChartJS.register(ArcElement, Tooltip, Legend);
 
+    const textCenter = {
+        id: 'textCenter',
+        beforeDatasetsDraw(chart: { getDatasetMeta?: any; ctx?: any; data?: any; }, args: any, pluginsOptions: any) {
+            const { ctx, data } = chart;
+            const winRatio = (stats.win / stats.matches) * 100
+
+            const lines = ['Win ratio:', winRatio];
+
+            ctx.save();
+            ctx.font = isScreenSmall ? 'bolder 10px Oswald' : 'bolder 20px Oswald';
+            ctx.fillStyle = '#2f7157';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            const x = chart.getDatasetMeta(0).data[0].x;
+            const y = chart.getDatasetMeta(0).data[0].y;
+
+            const lineHeight = 25; // Distanza tra le righe
+            lines.forEach((line, index) => {
+                ctx.fillText(line, x, y + index * lineHeight - (lines.length - 1) * (lineHeight / 2));
+            });
+
+            ctx.restore();
+        }
+    }
+
     const donut = {
         data: {
             labels: [],
@@ -34,9 +60,11 @@ const PlayerStatistics: React.FC<PlayerStatsProps> = ({ player, stats }) => {
             }],
         },
         options: {
+            responsive: true,
             events: [],
             plugins: {}
-        }
+        },
+        plugins: [textCenter]
     }
 
     const emptyDonut = {
@@ -49,7 +77,8 @@ const PlayerStatistics: React.FC<PlayerStatsProps> = ({ player, stats }) => {
         options: {
             events: [],
             plugins: {}
-        }
+        },
+        plugins: []
     }
 
     const graph = stats.matches > 0 ? donut : emptyDonut
@@ -81,7 +110,7 @@ const PlayerStatistics: React.FC<PlayerStatsProps> = ({ player, stats }) => {
                     </Container>
                 </Col>}
                 <Col className="d-flex justify-content-center mx-0" xs={isScreenSmall ? 9 : 4}>
-                    <Doughnut data={graph.data} options={graph.options}/>
+                    <Doughnut data={graph.data} options={graph.options} plugins={graph.plugins}/>
                 </Col>
                 {!isScreenSmall && <Col className="d-flex flex-column justify-content-between my-font" sm={3}>
                     <Container className="m-0">

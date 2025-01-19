@@ -1,4 +1,4 @@
-import {useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import {Match, Player } from "./types";
 import { getUser } from "./get_data";
 import {Col, Row } from "react-bootstrap";

@@ -1,4 +1,4 @@
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
 import {db, storage} from "../firebaseConfig";
 import {getDownloadURL, ref} from "firebase/storage";
 import {Match, Player, PlayerStats} from "./types";
@@ -29,7 +29,7 @@ async function getUser(userId: string): Promise<Player | null> {
             return null;
         }
     } catch (error) {
-        console.error("Error getting document:", error);
+        console.error("Error getting document: ", error);
         return null;
     }
 }
@@ -51,7 +51,7 @@ async function getStats(userId: string): Promise<PlayerStats | null> {
             return null;
         }
     } catch (error) {
-        console.error("Error getting document:", error);
+        console.error("Error getting document: ", error);
         return null;
     }
 }
@@ -78,7 +78,7 @@ async function getAllUsers() {
 
         return users;
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching users: ", error);
         return [];
     }
 }
@@ -101,7 +101,27 @@ async function getLastNMatches(n: number) {
 
         return matches.sort((m1, m2) => m1.date > m2.date ? -1 : 1).slice(0, n);
     } catch (error) {
-        console.error("Error fetching matches:", error);
+        console.error("Error fetching matches: ", error);
+        return [];
+    }
+}
+
+async function getPlayerMatches(playerId: string) {
+    try {
+        const q = query(collection(db, "matches"),
+            where("player1ID", "==", playerId) || where("player2ID", "==", playerId)
+        )
+        const querySnapshot = await getDocs(q);
+        const matches: Match[] = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            player1ID: doc.data().player1ID,
+            player2ID: doc.data().player2ID,
+            score: doc.data().score,
+            date: doc.data().date,
+        }));
+        return matches.sort((m1, m2) => m1.date > m2.date ? -1 : 1)
+    } catch (error) {
+        console.error("Error fetching player matches: ", error);
         return [];
     }
 }
@@ -124,9 +144,9 @@ const fetchProfileImage = async (profileImagePath: string) => {
         try {
             return await downloadImageFromStorage(profileImagePath);
         } catch (error) {
-            console.error("Error fetching profile image:", error);
+            console.error("Error fetching profile image: ", error);
         }
     }
 }
 
-export { getUser, getStats, getAllUsers, getLastNMatches, downloadImageFromStorage, fetchProfileImage };
+export { getUser, getStats, getAllUsers, getLastNMatches, getPlayerMatches, downloadImageFromStorage, fetchProfileImage };

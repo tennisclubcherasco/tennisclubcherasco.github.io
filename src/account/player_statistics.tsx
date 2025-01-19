@@ -27,10 +27,10 @@ const PlayerStatistics: React.FC<PlayerStatsProps> = ({ player, stats }) => {
             const { ctx, data } = chart;
             const winRatio = (stats.win / stats.matches) * 100
 
-            const lines = ['Win ratio:', winRatio];
+            const lines = ['Win ratio:', `${winRatio}%`];
 
             ctx.save();
-            ctx.font = isScreenSmall ? 'bolder 10px Oswald' : 'bolder 20px Oswald';
+            ctx.font = isScreenSmall ? 'bolder 20px Oswald' : 'bolder 20px Oswald';
             ctx.fillStyle = '#2f7157';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -169,9 +169,6 @@ const PlayerStatistics: React.FC<PlayerStatsProps> = ({ player, stats }) => {
                     </Col></>
                 }
             </Row>
-            {/*<Row className="d-flex justify-content-center mx-0 mt-5">*/}
-            {/*    */}
-            {/*</Row>*/}
         </Row>
     )
 }

@@ -1,0 +1,59 @@
+.slider-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 70%;
+    max-width: 600px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.circle-btn {
+    width: 40px; /* Altezza e larghezza uguali per il cerchio */
+    height: 40px;
+    border-radius: 50%; /* Rende il bottone circolare */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid; /* Nessun bordo */
+    background-color: #000; /* Colore di sfondo */
+    color: #fff; /* Colore del testo */
+    font-size: 1.5rem; /* Dimensione della freccia */
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Effetto ombra */
+    transition: transform 0.2s ease; /* Effetto al passaggio del mouse */
+}
+
+/* Posizionamento delle frecce */
+.arrow.left {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.arrow.right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Slider */
+.slider {
+    width: 100%;
+    overflow: hidden;
+}
+
+.slider-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+/* Card */
+.card-wrapper {
+    flex: 0 0 100%; /* Ogni card occupa il 100% del contenitore */
+    padding: 10px;
+}

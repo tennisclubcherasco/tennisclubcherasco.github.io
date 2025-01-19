@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { fetchProfileImage } from "../utils/get_data";
 import { ImageHandler } from "../utils/image_handler";
 import { calculateAge } from "../utils/utility";
+import {useNavigate} from "react-router-dom";
 
 interface TableEntryProps {
     player: Player;
@@ -11,6 +12,7 @@ interface TableEntryProps {
 }
 
 const TableEntry: React.FC<TableEntryProps> = ({ player, isScreenSmall }) => {
+    const navigate = useNavigate();
     const [profileImageURL, setProfileImageURL] = useState<string | null>(null);
 
     useEffect(() => {
@@ -88,13 +90,19 @@ const TableEntry: React.FC<TableEntryProps> = ({ player, isScreenSmall }) => {
                     fontFamily: "Oswald",
                     padding: "0",
                     wordWrap: "break-word",
-                    whiteSpace: "normal"
+                    whiteSpace: "normal",
                 }}
             >
-                <div style={{ display: "inline-block", verticalAlign: "middle", width: "45px", marginRight: "10px" }}>
-                    <ImageHandler size={45} imageUrl={profileImageURL} backColor={"#2f7157"}/>
+                <div
+                    style={{ display: "inline-block", verticalAlign: "middle", width: "45px", marginRight: "10px", cursor: "pointer"}}
+                    onClick={() => navigate(`/account/${player.uid}`)}
+                >
+                    <ImageHandler size={45} imageUrl={profileImageURL} backColor={"#2f7157"} onClick={() => navigate(`/account/${player.uid}`)}/>
                 </div>
-                <div className="ms-2" style={{ display: "inline-block", verticalAlign: "middle", wordBreak: "break-word" }}>
+                <div className="ms-2"
+                    style={{ display: "inline-block", verticalAlign: "middle", wordBreak: "break-word", cursor: "pointer"}}
+                    onClick={() => navigate(`/account/${player.uid}`)}
+                >
                     {player.name}
                     {isScreenSmall ? <br/> : " "}
                     {player.surname}

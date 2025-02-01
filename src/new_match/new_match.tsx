@@ -299,50 +299,28 @@ const NewMatch = () => {
                 </Col>
             </Row>
             <Row className="d-flex justify-content-center mt-5 mx-0">
-                <Col className="ms-0 p-0 justify-content-center" xs={isScreenSmall ? 5 : 3}>
-                    <Card className={cardMargin ? "h-100 mx-0" : "h-100 mx-5"} style={{
-                        borderRadius:"40px",
-                        color:"#2f7157",
-                        backgroundColor:"rgba(209,255,230,0.7)",
-                        border:"solid",
-                        borderWidth:"5px",
-                        borderColor:"#24644c"
-                    }}>
-                        <Card.Body className="px-1 d-flex flex-column align-items-center">
-                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL1} backColor={"#2f7157"}/>
-                            <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
-                                {player1?.name} {player1?.surname}
-                            </p>
-                            <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
-                                {player1 && "Ranked: "} {player1 && player1.ranking}
-                            </p>
-                        </Card.Body>
-                    </Card>
+                <Col className="ms-0 p-0 justify-content-top align-items-center flex-column d-flex" xs={isScreenSmall ? 5 : 3}>
+                    <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL1} backColor={"#2f7157"}/>
+                    <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
+                        {player1?.name} {player1?.surname}
+                    </p>
+                    <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
+                        {player1 && "Ranked: "} {player1 && player1.ranking}
+                    </p>
                 </Col>
                 <Col className="d-flex justify-content-center align-items-center mx-1" xs={1}>
                     <h2 className="my-font">
                         VS
                     </h2>
                 </Col>
-                <Col className="me-0 p-0" xs={isScreenSmall ? 5 : 3}>
-                    <Card className={cardMargin ? "h-100 mx-0" : "h-100 mx-5"} style={{
-                        borderRadius:"40px",
-                        color:"#2f7157",
-                        backgroundColor:"rgba(209,255,230,0.7)",
-                        border:"solid",
-                        borderWidth:"5px",
-                        borderColor:"#24644c"
-                    }}>
-                        <Card.Body className="px-1 d-flex flex-column align-items-center">
-                            <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL2} backColor={"#2f7157"}/>
-                            <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
-                                {player2 ? player2.name + " " + player2.surname : "Seleziona avversario"}
-                            </p>
-                            <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
-                                {player2 && "Ranked: "} {player2 && player2.ranking}
-                            </p>
-                        </Card.Body>
-                    </Card>
+                <Col className="ms-0 p-0 justify-content-top align-items-center flex-column d-flex" xs={isScreenSmall ? 5 : 3}>
+                    <ImageHandler size={isScreenSmall ? 80 : 160} imageUrl={profileImageURL2} backColor={"#2f7157"}/>
+                    <p className={isScreenSmall ? "my-font mt-2 h5" : "my-font mt-2 h2"}>
+                        {player2 ? player2.name + " " + player2.surname : "Seleziona avversario"}
+                    </p>
+                    <p className={isScreenSmall ? "my-font h6" : "my-font h5"}>
+                        {player2 && "Ranked: "} {player2 && player2.ranking}
+                    </p>
                 </Col>
                 <Col xs={12}>
                     <div className={isScreenSmall ? "mt-5 mx-4" : "mt-5 mx-5"} style={{height: "2px", backgroundColor: "#2f7157"}}></div>

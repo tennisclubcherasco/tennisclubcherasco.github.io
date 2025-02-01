@@ -1,17 +1,17 @@
 import { FaUserCircle } from "react-icons/fa"
 
-const AccountIcon = ({ size }: { size: number }) => {
+const AccountIcon = ({ size, color }: { size: number, color: string }) => {
     return (
             <FaUserCircle style={{
                 width: size + 'px',
                 height:'auto',
-                backgroundColor: '#2f7157',
+                backgroundColor: color,
                 color: 'white',
                 objectFit: 'scale-down',
                 border: 'solid',
                 borderWidth: '5px',
                 borderRadius: '50%',
-                borderColor: '#2f7157' }}
+                borderColor: color }}
             />
     )
 }

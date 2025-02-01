@@ -1,7 +1,7 @@
 import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
 import {db, storage} from "../firebaseConfig";
 import {getDownloadURL, ref} from "firebase/storage";
-import {Match, Player, PlayerStats} from "./types";
+import {H2H, Match, Player, PlayerStats} from "./types";
 
 // USERS
 async function getUser(userId: string): Promise<Player | null> {
@@ -47,7 +47,7 @@ async function getStats(userId: string): Promise<PlayerStats | null> {
                 ties: statsDoc.data().ties
             };
         } else {
-            console.log("No such document!");
+            console.log("No stats document!");
             return null;
         }
     } catch (error) {
@@ -128,6 +128,53 @@ async function getPlayerMatches(playerId: string) {
 
 // ----------------------------------------------------------------------------------------------------------------------------
 
+// H2H
+async function getH2H(p1ID: string, p2ID: string) {
+    try {
+        const q1 = query(collection(db, "H2H"),
+            where("player1", "==", p1ID),
+            where("player2", "==", p2ID)
+        );
+        const q2 = query(collection(db, "H2H"),
+            where("player1", "==", p2ID),
+            where("player2", "==", p1ID)
+        );
+
+        const querySnapshot1 = await getDocs(q1);
+        if (querySnapshot1.docs.length > 0) {
+            const head2head: H2H[] = querySnapshot1.docs.map((doc) => ({
+                id: doc.id,
+                player1: doc.data().player1,
+                player2: doc.data().player2,
+                winsP1: doc.data().winsP1,
+                winsP2: doc.data().winsP2,
+                ties: doc.data().ties
+            }));
+            return head2head[0];
+        }
+
+        const querySnapshot2 = await getDocs(q2);
+        if (querySnapshot2.docs.length > 0) {
+            const head2head: H2H[] = querySnapshot2.docs.map((doc) => ({
+                id: doc.id,
+                player1: doc.data().player2,
+                player2: doc.data().player1,
+                winsP1: doc.data().winsP2,
+                winsP2: doc.data().winsP1,
+                ties: doc.data().ties
+            }));
+            return head2head[0];
+        }
+
+        return undefined;
+
+    } catch (error) {
+        console.error("Error downloading H2H: ", error);
+        return undefined;
+    }
+}
+// ----------------------------------------------------------------------------------------------------------------------------
+
 // IMAGES
 const downloadImageFromStorage = async (imageUrl: string): Promise<string | null> => {
     try {
@@ -149,4 +196,4 @@ const fetchProfileImage = async (profileImagePath: string) => {
     }
 }
 
-export { getUser, getStats, getAllUsers, getLastNMatches, getPlayerMatches, downloadImageFromStorage, fetchProfileImage };
+export { getUser, getStats, getAllUsers, getLastNMatches, getPlayerMatches, getH2H, downloadImageFromStorage, fetchProfileImage };

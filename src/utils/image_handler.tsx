@@ -35,7 +35,7 @@ const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, im
                            width: (size+6) + "px", // Larghezza del cerchio
                            height: (size+6) + "px", // Altezza del cerchio (uguale alla larghezza)
                            borderRadius: "50%", // Trasforma il container in un cerchio
-                           backgroundColor: "#2f7157", // Colore di sfondo
+                           backgroundColor: backColor, // Colore di sfondo
                            display: "flex", // Centrare contenuti all'interno
                            alignItems: "center", // Centrare verticalmente
                            justifyContent: "center", // Centrare orizzontalmente
@@ -44,7 +44,7 @@ const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, im
                        }}
                        onClick={onClick}
             >
-                <AccountIcon size={size+6}/>
+                <AccountIcon size={size+6} color={backColor}/>
             </Container>
         )
     } else {
@@ -58,7 +58,7 @@ const ImageHandler = ({ size, imageUrl, onClick, backColor }: { size: number, im
                            display: "flex", // Centrare contenuti all'interno
                            alignItems: "center", // Centrare verticalmente
                            justifyContent: "center", // Centrare orizzontalmente
-                           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Aggiungi un'ombra opzionale
+                           boxShadow: "3px 5px 8px rgba(0, 0, 0, 0.2)", // Aggiungi un'ombra opzionale
                        }}
             >
                 <Container className="p-0 m-0"

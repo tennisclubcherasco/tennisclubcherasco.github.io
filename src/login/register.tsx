@@ -263,7 +263,7 @@ const Register = () => {
 
     const HandleImage = () => {
         if (image == null) return (
-            <AccountIcon size={120}/>
+            <AccountIcon size={120} color={"#24644c"}/>
         )
         else if (imagePreview) return (
             <div
@@ -292,7 +292,7 @@ const Register = () => {
             </div>
         )
         else return (
-            <AccountIcon size={120}/>
+            <AccountIcon size={120} color={"#24644c"}/>
         )
     }
 

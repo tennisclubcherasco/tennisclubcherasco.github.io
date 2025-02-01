@@ -213,7 +213,7 @@ function EditAccount() {
             </Container>
         )
         else if (imagePreview === "" || profileImageURL === "") return (
-            <AccountIcon size={150}/>
+            <AccountIcon size={150} color={"#24644c"}/>
         )
         else if (profileImageURL) return (
             <Container className="p-0"
@@ -236,7 +236,7 @@ function EditAccount() {
             </Container>
         )
         else return (
-                <AccountIcon size={150}/>
+                <AccountIcon size={150} color={"#24644c"}/>
             )
     }
 

@@ -7,6 +7,7 @@ import { downloadImageFromStorage, fetchProfileImage, getStats, getUser } from "
 import { useAuth } from "../AuthContext";
 import ScreenResize from "../utils/screen_resize";
 import EditButton from "./edit_button";
+import H2HButton from "./H2HButton";
 import { ImageHandler } from "../utils/image_handler";
 import {Player, PlayerStats} from "../utils/types";
 import PlayerStatistics from "./player_statistics";
@@ -92,7 +93,7 @@ function PlayerAccount() {
                                         <h3 className="my-font" style={{color:"#2f7157"}}>{user.phone}</h3>
                                     </Col>
                                 </Row>
-                                {currentUser.uid === userId ? <EditButton currentUserId={currentUser.uid}/> : <></>}
+                                {currentUser.uid === userId ? <EditButton currentUserId={currentUser.uid}/> : <H2HButton player2={userId}/>}
                             </Container>
                         </Col>
                         {isScreenSmall &&

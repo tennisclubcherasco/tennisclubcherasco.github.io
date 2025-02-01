@@ -9,12 +9,14 @@
     border-color: #2f7157;
     border-width: 3px;
     border-radius: 20px;
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
 }
 
 .my-button.btn-primary:active,
 .my-button.btn-primary:hover {
     background: #109661FF !important;
     border-color: #2f7157 !important;
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
 }
 
 .my-button.btn-primary:disabled {
@@ -22,6 +24,7 @@
     border-color: #2f7157;
     border-width: 3px;
     border-radius: 20px;
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
 }
 
 .my-button-outlined.btn-primary {
@@ -30,13 +33,15 @@
     border-color: #2f7157;
     border-width: 3px;
     border-radius: 20px;
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
 }
 
 .my-button-outlined.btn-primary:active,
 .my-button-outlined.btn-primary:hover {
     color: white !important;
     background: #109661FF !important;
-    border-color: white !important;
+    border-color: #2f7157 !important;
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (min-width: 10px) {

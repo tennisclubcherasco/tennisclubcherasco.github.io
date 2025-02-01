@@ -38,7 +38,7 @@ const Ranking: React.FC<{ isScreenSmall: Boolean }> = ({isScreenSmall}) => {
                     </TableHead>
                     <TableBody>
                         {allPlayers.sort((a, b) => a.ranking - b.ranking).map((player) => (
-                            <TableEntry player={player} isScreenSmall={isScreenSmall}/>
+                            <TableEntry key={player.uid} player={player} isScreenSmall={isScreenSmall}/>
                         ))}
                     </TableBody>
                 </Table>

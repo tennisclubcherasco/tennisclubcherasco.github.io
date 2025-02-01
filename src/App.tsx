@@ -1,7 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
-import {Col, Container } from 'react-bootstrap';
-import { storage } from './firebaseConfig';
+import {Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './login/login'
 import Register from './login/register'
@@ -11,6 +9,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import EditAccount from './account/edit_account';
 import NewMatch from './new_match/new_match';
+import HEAD2HEAD from "./h2h/h2h";
 
 function App() {
     return (
@@ -24,6 +23,7 @@ function App() {
                         <Route path="/account/:userId" element={<PlayerAccount/>}/>
                         <Route path="/account/:userId/edit" element={<EditAccount/>}/>
                         <Route path="/newMatch" element={<NewMatch/>}/>
+                        <Route path="/H2H/:player2ID?" element={<HEAD2HEAD/>}/>
                     </Routes>
                 </Container>
             </HashRouter>

@@ -1,6 +1,6 @@
 {
-  "short_name": "Tennis Club Cherasco",
-  "name": "Tennis Club Cherasco",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
